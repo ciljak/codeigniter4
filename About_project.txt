@@ -1,0 +1,2 @@
+On main PC is created codeigniter 4 project, on notebook codeigniter. Please do main changes only on codeigniter4
+on main pc.
