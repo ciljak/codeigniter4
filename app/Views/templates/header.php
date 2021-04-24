@@ -6,7 +6,7 @@
 	<meta name="description" content="The small framework with powerful features">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
-    <link rel="stylesheet" href="./css/our_style.css">
+    <link rel="stylesheet" href="http://localhost/codeigniter4/public/css/our_style.css">
      <script src="./js/our_js.js"></script>
 </head>    
 
@@ -23,6 +23,7 @@
 				<button onclick="toggleMenu();">&#9776;</button>
 			</li>
 			<li class="menu-item hidden"><a href="about">About</a></li>
+			<li class="menu-item hidden"><a href="news">News</a></li>
             <li class="menu-item hidden"><a href="guestbook">Guestbook</a></li>
 			<li class="menu-item hidden"><a href="https://codeigniter4.github.io/userguide/" target="_blank">Docs</a>
 			</li>

@@ -6,8 +6,8 @@ class Guestbook extends BaseController
 {
 	public function index()
 	{
-        echo view('header');
+        echo view('templates/header');
         echo view('guestbook');
-        echo view('footer');
+        echo view('templates/footer');
 	}
 }

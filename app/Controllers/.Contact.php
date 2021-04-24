@@ -6,8 +6,8 @@ class Contact extends BaseController
 {
 	public function index()
 	{
-        echo view('header');
+        echo view('templates/header');
         echo view('contact');
-        echo view('footer');
+        echo view('templates/footer');
 	}
 }

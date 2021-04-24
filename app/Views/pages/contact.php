@@ -1,6 +1,6 @@
 <section>
 
-<h1> Contact us </h1>
+<h1> Contact us (from Pages) </h1>
 
 <p> <b>Project name: </b>CodeIgniter 4  - basic concepts of MVC based web php framework</p>
 <p> <b>Author: </b>Eng. Milan Ciljak</p>

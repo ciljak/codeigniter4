@@ -35,10 +35,16 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Home::index');
 
 // here we add our routes - CL 18.4.21
+$routes->match(['get', 'post'], 'news/create', 'News::create'); // for routing to page creating new articles in news
 
-$routes->add('about', 'About::index');
-$routes->add('contact', 'Contact::index');
-$routes->add('guestbook', 'Guestbook::index');
+$routes->get('news/(:segment)', 'News::view/$1');  // for routing to news implemented along provided tutorial of code igniter
+$routes->get('news', 'News::index');
+
+$routes->get('(:any)', 'Pages::view/$1'); // added after rework for common pages handling along manual page https://codeigniter.com/user_guide/tutorial/static_pages.html, 24.4.21
+    // after this update we dont need type /public/pages/vieww/name_of_page but only /public/name_of_the_pge
+//$routes->add('about', 'About::index');
+//$routes->add('contact', 'Contact::index');
+//$routes->add('guestbook', 'Guestbook::index');
 
 
 /*
