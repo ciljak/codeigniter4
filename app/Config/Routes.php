@@ -36,6 +36,8 @@ $routes->get('/', 'Home::index');
 
 // here we add our routes - CL 18.4.21
 $routes->match(['get', 'post'], 'news/create', 'News::create'); // for routing to page creating new articles in news
+$routes->match(['get', 'post'], 'news/delete_news_article/(:segment)', 'News::delete_news_article/$1'); // for routing to controller responsible for deletion
+$routes->match(['get', 'post'], 'news/update_news_article/(:segment)', 'News::update_news_article/$1'); // for routing to controller responsible for news article update
 
 $routes->get('news/(:segment)', 'News::view/$1');  // for routing to news implemented along provided tutorial of code igniter
 $routes->get('news', 'News::index');

@@ -6,8 +6,9 @@
 	<meta name="description" content="The small framework with powerful features">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
-    <link rel="stylesheet" href="http://localhost/codeigniter4/public/css/our_style.css">
-     <script src="./js/our_js.js"></script>
+    <link rel="stylesheet" href="<?php echo base_url('public/css/our_style.css'); ?>">
+     <script src="<?php echo base_url('public/js/our_js.js'); ?>"></script>
+	 <script src="<?php echo base_url('public/js/jquery-3.6.0.js'); ?>"></script>
 </head>    
 
     <!-- HEADER: MENU + HEROE SECTION -->
@@ -22,13 +23,14 @@
 			<li class="menu-toggle">
 				<button onclick="toggleMenu();">&#9776;</button>
 			</li>
-			<li class="menu-item hidden"><a href="about">About</a></li>
-			<li class="menu-item hidden"><a href="news">News</a></li>
-            <li class="menu-item hidden"><a href="guestbook">Guestbook</a></li>
+			<!-- base_url inserts part defined in .env config file consists of main url part that can be easy chenged along hosting migration -->
+			<li class="menu-item hidden"><a href="<?php echo base_url('public/about') ; ?>">About</a></li>
+			<li class="menu-item hidden"><a href="<?php echo base_url('public/news') ; ?>">News</a></li>
+            <li class="menu-item hidden"><a href="<?php echo base_url('public/guestbook') ; ?>">Guestbook</a></li>
 			<li class="menu-item hidden"><a href="https://codeigniter4.github.io/userguide/" target="_blank">Docs</a>
 			</li>
 			<li class="menu-item hidden"><a href="https://forum.codeigniter.com/" target="_blank">Community</a></li>
-			<li class="menu-item hidden"><a href="contact">Contact us</a></li>
+			<li class="menu-item hidden"><a href="<?php echo base_url('public/contact') ; ?>">Contact us</a></li>
 		</ul>
 	</div>
 

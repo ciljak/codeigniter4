@@ -1,6 +1,6 @@
 <section>
 
-<h1> About page from Pages - basics of Codeigniter 4 </h1>
+<h1 class="main_h1">  About page  - basics of Codeigniter 4 </h1>
 
 <p>In this project we will focus on introduction abilities of CodeIgniter 4.</p>
 

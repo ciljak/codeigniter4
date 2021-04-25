@@ -1,4 +1,4 @@
-
+ <!-- code from create must be extednded to load content of edited article and then update them -->
 <section>
     
 
@@ -10,15 +10,15 @@
         The \Config\Services::validation()->listErrors() function is used to report errors related to form validation. 
         The csrf_field() function creates a hidden input with a CSRF token that helps protect against some common attacks. -->
       <fieldset>
-        <legend><?= esc($title) ?></legend>
+      <legend><?= esc($title) ?> </legend>  
         <label for="title">Title</label>
-        <input type="input" name="title" /><br />
+        <input type="input" name="title" value="<?php echo $news['title']; ?>"/><br />
 
         <label for="body">Text</label>
-        <textarea id="textarea_styled" name="body"></textarea><br />
+        <textarea id="textarea_styled" name="body"><?php echo $news['body']; ?></textarea><br />
 
-        <input id="input_button_create" type="submit" name="submit" value="Create news item" />
-      </fieldset>
+        <input id="input_button_update" type="submit" name="submit" value="Update news item" />
+       </fieldset> 
     </form>
 
 </section>

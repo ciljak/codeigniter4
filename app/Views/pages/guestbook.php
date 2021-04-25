@@ -1,6 +1,6 @@
 <section>
 
-<h1> Guestbook </h1>
+<h1 class="main_h1"> Guestbook </h1>
 
 
 
