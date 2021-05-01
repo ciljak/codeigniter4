@@ -319,3 +319,10 @@ legend {
 fieldset {
     background-color: rgb(250, 250, 250);
 }
+
+
+/* formating tables in project */
+#left_news_article {
+    padding-left: 10px;
+}
+

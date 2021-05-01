@@ -4,7 +4,7 @@
 
     <?= \Config\Services::validation()->listErrors() ?>
 
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
         <?= csrf_field() ?>
         <!-- There are probably only two things here that look unfamiliar. 
         The \Config\Services::validation()->listErrors() function is used to report errors related to form validation. 
@@ -16,6 +16,9 @@
 
         <label for="body">Text</label>
         <textarea id="textarea_styled" name="body"><?php echo $news['body']; ?></textarea><br />
+
+        <label for="formGroupExampleInput">Article picture: </label>
+        <input type="file" name="news_image_file" class="form-control" id="news_image_file" onchange="readURL(this);" accept=".png, .jpg, .jpeg" /> <br />
 
         <input id="input_button_update" type="submit" name="submit" value="Update news item" />
        </fieldset> 

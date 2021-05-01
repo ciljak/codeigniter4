@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Models\NewsModel;
 use CodeIgniter\Controller;
 
+//$image = Config\Services::image();
+// for image handling please refer this article https://www.nicesnippets.com/blog/codeigniter-4-image-upload-with-preview-example, 1.5.2021
+
 class News extends Controller
 {
     public function index()
@@ -50,13 +53,29 @@ class News extends Controller
         if ($this->request->getMethod() === 'post' && $this->validate([
                 'title' => 'required|min_length[3]|max_length[255]',
                 'body'  => 'required',
+                'news_image_file' => [
+                    'uploaded[news_image_file]',
+                    'mime_in[news_image_file,image/jpg,image/jpeg,image/gif,image/png]',
+                    'max_size[news_image_file,12096]',
+                ],
             ]))
         {
+            $news_image = $this->request->getFile('news_image_file'); // creating object of uploaded image
+
+            
+            $newName = $news_image->getRandomName(); // generate new random name
+            $news_image_type = $news_image->getMimeType();
+           
+            $news_image = $news_image->move('./images', $newName); //picture is moved into a images folder nested in public folder
+            
+            // The move() method returns a new File instance that for the relocated file, so you must capture the result if the resulting location is needed:
             $model->save([
-                'title' => $this->request->getPost('title'),
-                'slug'  => url_title($this->request->getPost('title'), '-', TRUE),
-                'body'  => $this->request->getPost('body'),
-            ]);
+                    'title' => $this->request->getPost('title'),
+                    'slug'  => url_title($this->request->getPost('title'), '-', TRUE),
+                    'body'  => $this->request->getPost('body'),
+                    'picture_name' => $newName, //$newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
+                    'picture_type'  => $news_image_type
+            ]);    
             
             //$data['news'] = $model->getLatest(); this approach does not work because i cann note order_by and take first() element but all data ara available 
             // and can by simply passed by on from send post
@@ -64,7 +83,13 @@ class News extends Controller
                 'title' => $this->request->getPost('title'),
                 'slug'  => url_title($this->request->getPost('title'), '-', TRUE),
                 'body'  => $this->request->getPost('body'),
+                'picture_name' =>  $newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
+                'picture_type'  => $news_image_type
             ] ;
+
+           
+
+
             echo view('templates/header', ['title' => 'Create a news item']);
             echo view('news/success', $data );
             echo view('templates/footer');
@@ -83,6 +108,13 @@ class News extends Controller
 
             // first obtain data that will be deleted for passing into view informing about data deletion
             $data['news'] = $model->getID($id);
+
+            // delete related image
+            helper('filesystem'); // load helper - for more please read https://codeigniter.com/user_guide/helpers/filesystem_helper.html, 1.5.2021 
+                // delete appropriate file
+                /*  echo '<?=base_url()?>/public/images/'.$data['news']['picture_name']; - for debug of delete link creation*/ 
+                /* delete_files('<?=base_url()?>/public/images/'.$data['news']['picture_name'], true); */
+                unlink('./images/'.$data['news']['picture_name']);
            
             
             $model->where('id', $id)->delete();
@@ -109,13 +141,28 @@ class News extends Controller
                 if ($this->request->getMethod() === 'post' && $this->validate([
                     'title' => 'required|min_length[3]|max_length[255]',
                     'body'  => 'required',
+                    'news_image_file' => [
+                        'uploaded[news_image_file]',
+                        'mime_in[news_image_file,image/jpg,image/jpeg,image/gif,image/png]',
+                        'max_size[news_image_file,12096]',
+                    ],
                 ]))
             {
+                $news_image = $this->request->getFile('news_image_file'); // creating object of uploaded image
+
+            
+                $newName = $news_image->getRandomName(); // generate new random name
+                $news_image_type = $news_image->getMimeType();
+               
+                $news_image = $news_image->move('./images', $newName); //picture is moved into a images folder nested in public folder
+                
                 $model->save([
                     'id' => $id,
                     'title' => $this->request->getPost('title'),
                     'slug'  => url_title($this->request->getPost('title'), '-', TRUE),
                     'body'  => $this->request->getPost('body'),
+                    'picture_name' =>  $newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
+                    'picture_type'  => $news_image_type
                 ]);
                 
                 //$data['news'] = $model->getLatest(); this approach does not work because i cann note order_by and take first() element but all data ara available 
@@ -124,6 +171,8 @@ class News extends Controller
                     'title' => $this->request->getPost('title'),
                     'slug'  => url_title($this->request->getPost('title'), '-', TRUE),
                     'body'  => $this->request->getPost('body'),
+                    'picture_name' =>  $newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
+                    'picture_type'  => $news_image_type
                 ] ;
                 echo view('templates/header', ['title' => 'Create a news item']);
                 echo view('news/success', $data );
