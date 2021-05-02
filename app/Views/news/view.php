@@ -3,6 +3,13 @@
 <section>
     <h2 class="news_singleview_h2_title"><?= esc($news['title']) ?></h2>
     <p class="news_singleview_p_body"><?= esc($news['body']) ?></p>
+    <?php if (!empty($news['picture_name'])): ?>  <!-- if picture is provided it mean we will display in two table column -->
+                        <td>
+                            <div id="article_image" class="article_image">
+                                <img src="<?=base_url()?>/public/images/<?= esc($news['picture_name']) ?>" alt="Article image - <?= esc($news['title']) ?> " width="250px" >
+                            </div>
+                        </td>
+    <?php endif ?>  
 </section>
 <section>
 <a href="<?php echo base_url('public/news'); ?>"><button type="button">Return to main news page</button></a> 
