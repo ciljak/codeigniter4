@@ -3,7 +3,7 @@
     
 
     <?= \Config\Services::validation()->listErrors() ?>
-    <form enctype="multipart/form-data" action="<?php echo base_url('public/pages/update_guestbook_article/'); ?>" method="post"> <!-- guestbook_add_post $_SERVER['PHP_SELF'] -->
+    <form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post"> <!-- guestbook_add_post $_SERVER['PHP_SELF'] -->
         <?= csrf_field() ?>
         <!-- There are probably only two things here that look unfamiliar. 
         The \Config\Services::validation()->listErrors() function is used to report errors related to form validation. 

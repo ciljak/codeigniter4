@@ -40,15 +40,16 @@ $routes->match(['get', 'post'], 'news/delete_news_article/(:segment)', 'News::de
 $routes->match(['get', 'post'], 'news/update_news_article/(:segment)', 'News::update_news_article/$1'); // for routing to controller responsible for news article update
 
 //gustbook routing
-$routes->match(['get', 'post'], 'pages/guestbook_add_post', 'Pages::guestbook_add_post'); // for routing to controller responsible for news article update
-$routes->match(['get', 'post'], 'pages/delete_guestbook_article/(:segment)', 'Pages::delete_guestbook_article/$1'); // for routing to controller responsible for deletion
+$routes->match(['get', 'post'], 'guestbook/guestbook_add_post', 'Guestbook::guestbook_add_post'); // for routing to controller responsible for news article update
+$routes->match(['get', 'post'], 'guestbook/delete_guestbook_article/(:segment)', 'Guestbook::delete_guestbook_article/$1'); // for routing to controller responsible for deletion
 //$routes->get( 'pages/delete_guestbook_article/(:segment)', 'Pages::delete_guestbook_article/$1'); // for routing to controller responsible for deletion
-$routes->match(['get', 'post'], 'pages/update_guestbook_article/(:segment)', 'Pages::update_guestbook_article/$1'); // for routing to controller responsible for news article update
+$routes->match(['get', 'post'], 'guestbook/update_guestbook_article/(:segment)', 'Guestbook::update_guestbook_article/$1'); // for routing to controller responsible for news article update
 
 $routes->get('news/(:segment)', 'News::view/$1');  // for routing to news implemented along provided tutorial of code igniter
 $routes->get('public/guestbook_single_view(:segment)', 'Pages:guestbook_single_view/$1');  // for routing to news implemented along provided tutorial of code igniter
 
 $routes->get('news', 'News::index');
+$routes->get('guestbook', 'Guestbook::index');
 
 $routes->get('(:any)', 'Pages::view/$1'); // added after rework for common pages handling along manual page https://codeigniter.com/user_guide/tutorial/static_pages.html, 24.4.21
     // after this update we dont need type /public/pages/vieww/name_of_page but only /public/name_of_the_pge

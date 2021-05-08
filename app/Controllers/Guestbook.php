@@ -6,57 +6,56 @@ use App\Models\GuestbookModel;
 
 use CodeIgniter\Controller;
 
-class Pages extends Controller
+class Guestbook extends Controller
 {
     public function index()
     {
-        return view('welcome_message');
+        $model = new GuestbookModel();
+
+        $data = [
+            'guestbook'  => $model->getGuestPosts(),
+            
+        ];
+        
+        if (empty($data['guestbook']))
+            {
+                throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the guestbookitem: '. $slug);
+            }
+    
+        
+
+        echo view('templates/header', ['title' => 'Guestbook']);
+        echo view('guestbook/guestbook', $data );
+        echo view('templates/footer');
     }
 
-    public function view($page = 'home') // controler method responsible for common display of all pages
+    public function view($slug = null)   // not in use in this approach where guestbook is separated in its own folder
     {
-        if ( ! is_file(APPPATH.'/Views/pages/'.$page.'.php'))
+        $model = new GuestbookModel();
+
+        $data = [
+            'guestbook'  => $model->getGuestPosts(),
+            
+        ];
+     if (empty($data['guestbook']))
         {
-            // Whoops, we don't have a page for that!
-            throw new \CodeIgniter\Exceptions\PageNotFoundException($page);
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the guestbookitem: '. $slug);
         }
     
-        $data['title'] = ucfirst($page); // Capitalize the first letter
+        
 
-        /* this part adapt data that will be read from model and send to approprite page - as example for the guestbook we read all posts from database and pass them into a view */
-        switch($page) {
-            case "guestbook"  :
-                {
-                    $model = new GuestbookModel();
-                    $data = [
-                        'guestbook'  => $model->getGuestPosts(),
-                        
-                    ];
-            
-            
-                    echo view('templates/header', ['title' => 'Guestbook']);
-                    echo view('pages/guestbook', $data );
-                    echo view('templates/footer');
-                }
-                case "delete_guestbook_article"  :
-                    {
-                        delete_guestbook_article($id);
-                    }    
-               break; //optional - for next pages that need obtain data from model representing a data stored in a database */
-           // case constant-expression  :
-             //  statement(s);
-            //   break; //optional
-           
-            // this part handle default page behaviour
-            default : 
-            echo view('templates/header', $data);
-            echo view('pages/'.$page, $data);
-            echo view('templates/footer', $data);
-         }
-
+        echo view('templates/header', ['title' => 'Guestbook']);
+        echo view('guestbook/guestbook', $data );
+        echo view('templates/footer');
+    
+       
+    
+       
     
         
     }
+
+    
 
     /**
      *  GUESTBOOK methods handling responsibility for - add, delete or update guestbook posts
@@ -77,7 +76,7 @@ class Pages extends Controller
         $data['title'] = $data['guestbook']['name_of_writer'];
     
         echo view('templates/header', $data);
-        echo view('pages/guestbook_single_view', $data);
+        echo view('guestbook/guestbook_single_view', $data);
         echo view('templates/footer', $data);
     }
 
@@ -134,13 +133,13 @@ class Pages extends Controller
     
     
                 echo view('templates/header', ['title' => 'Create a news item']);
-                echo view('pages/guestbook', $data );
+                echo view('guestbook/guestbook', $data );
                 echo view('templates/footer');
             }
             else
             {   // part responsible for display a error messages if data not validated or post does not went succesfully
                 echo view('templates/header', ['title' => 'Create a news item']);
-                echo view('pages/guestbook_err');
+                echo view('guestbook/guestbook_err');
                 echo view('templates/footer');
             }
         }
@@ -148,10 +147,9 @@ class Pages extends Controller
         public function delete_guestbook_article($id) {
 
             $model = new GuestbookModel();
-            console.log("It works"); 
-            console.log("Obtained id".$id); 
+           
                 // first obtain data that will be deleted for passing into view informing about data deletion
-                $mydata['guestbook'] = $model->getGuestID($id);
+                $data['guestbook'] = $model->getGuestID($id);
             
             
                 // delete related image
@@ -167,7 +165,7 @@ class Pages extends Controller
                
                
                 echo view('templates/header');
-                echo view('pages/delete_guestbook_article',$mydata);
+                echo view('guestbook/delete_guestbook_article',$data);
               
                 echo view('templates/footer');
            
@@ -202,6 +200,7 @@ class Pages extends Controller
                     
                     // The move() method returns a new File instance that for the relocated file, so you must capture the result if the resulting location is needed:
                     $model->save([
+                            'id' => $id,
                             'name_of_writer' => $this->request->getPost('name_of_writer'),
                             'email' => $this->request->getPost('email'),
                             'slug'  => url_title($this->request->getPost('name_of_writer'), '-', TRUE),
@@ -220,7 +219,7 @@ class Pages extends Controller
     
     
                     echo view('templates/header', ['title' => 'Guestbook - updated']);
-                    echo view('pages/guestbook', $data );
+                    echo view('guestbook/guestbook', $data );
                     echo view('templates/footer');
                 }
                 else
@@ -229,7 +228,7 @@ class Pages extends Controller
                     $data['guestbook'] = $model->getGuestID($id);
                    
                     echo view('templates/header', ['title' => 'Update a news item']);
-                    echo view('pages/update_guestbook_article', $data );
+                    echo view('guestbook/update_guestbook_article', $data );
                     echo view('templates/footer');
                 }
                  

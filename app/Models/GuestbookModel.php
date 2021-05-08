@@ -14,7 +14,9 @@ class GuestbookModel extends Model
     {
         if ($slug=== false)
         {
-
+            $this->builder()
+            
+            ->orderBy('id', 'desc');
             return $this->findAll(); // helper methods used by Query builder
         }
 

@@ -8,7 +8,7 @@
 
     <?= \Config\Services::validation()->listErrors() ?>
 
-    <form enctype="multipart/form-data" action="<?php echo base_url('public/pages/guestbook_add_post/'); ?>" method="post"> <!-- guestbook_add_post $_SERVER['PHP_SELF'] -->
+    <form enctype="multipart/form-data" action="<?php echo base_url('public/guestbook/guestbook_add_post/'); ?>" method="post"> <!-- guestbook_add_post $_SERVER['PHP_SELF'] -->
         <?= csrf_field() ?>
         <!-- There are probably only two things here that look unfamiliar. 
         The \Config\Services::validation()->listErrors() function is used to report errors related to form validation. 
@@ -72,8 +72,8 @@
         </div>   
             
              <br />
-            <a  href="<?php echo base_url('public/delete_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_delete"> Delete</button></a> 
-            <a  href="<?php echo base_url('public/update_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_update"> Update</button></a> 
+            <a  href="<?php echo base_url('public/guestbook/delete_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_delete"> Delete</button></a> 
+            <a  href="<?php echo base_url('public/guestbook/update_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_update"> Update</button></a> 
              <!-- now we pass id of news article for deletion to controler news and them method  delete_news_article -->
              <br />
              <hr> <br />
