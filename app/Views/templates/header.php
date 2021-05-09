@@ -30,7 +30,8 @@
 			<li class="menu-item hidden"><a href="https://codeigniter4.github.io/userguide/" target="_blank">Docs</a>
 			</li>
 			<li class="menu-item hidden"><a href="https://forum.codeigniter.com/" target="_blank">Community</a></li>
-			<li class="menu-item hidden"><a href="<?php echo base_url('public/contact') ; ?>">Contact us</a></li>
+			<li class="menu-item hidden"><a href="<?php echo base_url('public/contactus') ; ?>">Contact us</a></li>
+			<li class="menu-item hidden"><a href="<?php echo base_url('public/users') ; ?>">Personal part - login</a></li>
 		</ul>
 	</div>
 

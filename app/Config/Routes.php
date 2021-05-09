@@ -18,7 +18,8 @@ if (file_exists(SYSTEMPATH . 'Config/Routes.php'))
  * --------------------------------------------------------------------
  */
 $routes->setDefaultNamespace('App\Controllers');
-$routes->setDefaultController('Home');
+//$routes->setDefaultController('Home');
+$routes->setDefaultController('Users');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
@@ -32,7 +33,9 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+$routes->get('/', 'Users::index', ['filter' => 'noauth']);
 $routes->get('/', 'Home::index');
+
 
 // here we add our routes - CL 18.4.21
 $routes->match(['get', 'post'], 'news/create', 'News::create'); // for routing to page creating new articles in news
@@ -45,11 +48,28 @@ $routes->match(['get', 'post'], 'guestbook/delete_guestbook_article/(:segment)',
 //$routes->get( 'pages/delete_guestbook_article/(:segment)', 'Pages::delete_guestbook_article/$1'); // for routing to controller responsible for deletion
 $routes->match(['get', 'post'], 'guestbook/update_guestbook_article/(:segment)', 'Guestbook::update_guestbook_article/$1'); // for routing to controller responsible for news article update
 
+//contact us routing - CL 9.5.2021
+$routes->match(['get', 'post'], 'contactus/contactus_add_post', 'Contactus::contactus_add_post'); // for routing to controller responsible for news article update
+$routes->match(['get', 'post'], 'contactus/delete_contactus_article/(:segment)', 'Contactus::delete_contactus_article/$1'); // for routing to controller responsible for deletion
+//$routes->get( 'pages/delete_guestbook_article/(:segment)', 'Pages::delete_guestbook_article/$1'); // for routing to controller responsible for deletion
+$routes->match(['get', 'post'], 'contactus/update_contactus_article/(:segment)', 'Contactus::update_contactus_article/$1'); // for routing to controller responsible for news article update
+
 $routes->get('news/(:segment)', 'News::view/$1');  // for routing to news implemented along provided tutorial of code igniter
 $routes->get('public/guestbook_single_view(:segment)', 'Pages:guestbook_single_view/$1');  // for routing to news implemented along provided tutorial of code igniter
 
+// personal part for loged in users - users
+$routes->get('logout', 'Users::logout');
+$routes->match(['get','post'],'users/register', 'Users::register', ['filter' => 'noauth']);
+$routes->match(['get','post'],'users/profile', 'Users::profile',['filter' => 'auth']);
+$routes->get('dashboard', 'Dashboard::index',['filter' => 'auth']);
+
+$routes->get('/', 'Users::index', ['filter' => 'noauth']);
+$routes->get('users', 'Users::index');
+
+
 $routes->get('news', 'News::index');
 $routes->get('guestbook', 'Guestbook::index');
+$routes->get('contactus', 'Contactus::index');
 
 $routes->get('(:any)', 'Pages::view/$1'); // added after rework for common pages handling along manual page https://codeigniter.com/user_guide/tutorial/static_pages.html, 24.4.21
     // after this update we dont need type /public/pages/vieww/name_of_page but only /public/name_of_the_pge
