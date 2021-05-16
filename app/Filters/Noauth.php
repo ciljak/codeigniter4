@@ -6,18 +6,18 @@ use CodeIgniter\Filters\FilterInterface;
 
 class Noauth implements FilterInterface
 {
-    public function before(RequestInterface $request)
+    public function before(RequestInterface $request, $dumy=NULL)
     {
         // Do something here
         if(session()->get('isLoggedIn')){
-          return redirect()->to(site_url('public/users/dashboard'));
+          return redirect()->to('/dashboard');
         }
 
     }
 
     //--------------------------------------------------------------------
 
-    public function after(RequestInterface $request, ResponseInterface $response)
+    public function after(RequestInterface $request, ResponseInterface $response,$dumy=NULL)
     {
         // Do something here
     }

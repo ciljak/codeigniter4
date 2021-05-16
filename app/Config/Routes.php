@@ -33,8 +33,17 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Users::index', ['filter' => 'noauth']);
-$routes->get('/', 'Home::index');
+//$routes->get('/', 'Home::index');
+//$routes->get('/', 'Users::index');
+$routes->get('/', 'Pages::view/about', ['filter' => 'noauth']);
+$routes->get('users', 'Users::index', ['filter' => 'noauth']);
+$routes->get('users/logout', 'Users::logout');
+$routes->match(['get','post'],'users/register', 'Users::register', ['filter' => 'noauth']);
+$routes->match(['get','post'],'users/profile', 'Users::profile',['filter' => 'auth']);
+$routes->get('users/dashboard', 'Dashboard::index',['filter' => 'auth']);
+
+
+
 
 
 // here we add our routes - CL 18.4.21
@@ -58,13 +67,14 @@ $routes->get('news/(:segment)', 'News::view/$1');  // for routing to news implem
 $routes->get('public/guestbook_single_view(:segment)', 'Pages:guestbook_single_view/$1');  // for routing to news implemented along provided tutorial of code igniter
 
 // personal part for loged in users - users
-$routes->get('logout', 'Users::logout');
-$routes->match(['get','post'],'users/register', 'Users::register', ['filter' => 'noauth']);
-$routes->match(['get','post'],'users/profile', 'Users::profile',['filter' => 'auth']);
-$routes->get('dashboard', 'Dashboard::index',['filter' => 'auth']);
+//$routes->get('logout', 'Users::logout');
+//$routes->match(['get','post'],'users/register', 'Users::register');
+//$routes->match(['get','post'],'users/register', 'Users::register');
+//$routes->match(['get','post'],'users/profile', 'Users::profile');
+//$routes->get('dashboard', 'Dashboard::index');
 
-$routes->get('/', 'Users::index', ['filter' => 'noauth']);
-$routes->get('users', 'Users::index');
+//$routes->get('/', 'Users::index', ['filter' => 'noauth']);
+//$routes->get('users', 'Users::index');
 
 
 $routes->get('news', 'News::index');

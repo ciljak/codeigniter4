@@ -18,12 +18,15 @@ class Filters extends BaseConfig
 	public $aliases = [
 		/* 'csrf'     => CSRF::class,
 		'toolbar'  => DebugToolbar::class,
-		'honeypot' => Honeypot::class, */
+		'honeypot' => Honeypot::class,
                  'csrf'     => \CodeIgniter\Filters\CSRF::class,
 		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
-		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
+		'honeypot' => \CodeIgniter\Filters\Honeypot::class,  */
 
-                'auth' => \App\Filters\Auth::class,
+        'csrf'     => \CodeIgniter\Filters\CSRF::class,
+		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
+		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
+		'auth' => \App\Filters\Auth::class,
 		'noauth' => \App\Filters\Noauth::class,
 		'userscheck' => \App\Filters\UsersCheck::class,
 	];
@@ -36,13 +39,13 @@ class Filters extends BaseConfig
 	 */
 	public $globals = [
 		'before' => [
-                        //'userscheck'
-			 'honeypot',
-			 'csrf',
+            'userscheck'
+			 //'honeypot',
+			 // 'csrf',
 		],
 		'after'  => [
-			//'toolbar',
-			 'honeypot',
+			'toolbar',
+			 //'honeypot',
 		],
 	];
 

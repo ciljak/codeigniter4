@@ -72,8 +72,8 @@
         </div>   
             
              <br />
-            <a  href="<?php echo base_url('public/contactus/delete_contactus_article/'.$contactus_item['id']);?> "><button id="input_button_delete"> Delete message</button></a> 
-            <a  href="<?php echo base_url('public/contactus/update_contactus_article/'.$contactus_item['id']);?> "><button id="input_button_update"> Update message</button></a> 
+            <a  href="<?php echo base_url('contactus/delete_contactus_article/'.$contactus_item['id']);?> "><button id="input_button_delete"> Delete message</button></a> 
+            <a  href="<?php echo base_url('contactus/update_contactus_article/'.$contactus_item['id']);?> "><button id="input_button_update"> Update message</button></a> 
              <!-- now we pass id of news article for deletion to controler news and them method  delete_news_article -->
              <br />
              <hr> <br />

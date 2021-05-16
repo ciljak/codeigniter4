@@ -52,7 +52,7 @@
                    <?php if (!empty($guestbook_item['picture_name'])): ?>  <!-- if picture is provided it mean we will display in two table column -->
                         <td>
                             <div id="article_image" class="article_image">
-                                <img src="<?=base_url()?>/public/images/<?= esc($guestbook_item['picture_name']) ?>" alt="Guestbook entry image - <?= esc($guestbook_item['name_of_writer']) ?> " width="250px" >
+                                <img src="<?=base_url()?>/images/<?= esc($guestbook_item['picture_name']) ?>" alt="Guestbook entry image - <?= esc($guestbook_item['name_of_writer']) ?> " width="250px" >
                             </div>
                         </td>
                     <?php endif ?>  
@@ -67,13 +67,13 @@
             <div id="article_hyperlink" class="article_hyperlink">
                 <p><a class="news_article_hyperlink" href="<?php echo base_url('public/guestbook_single_view'); ?><?php echo "/" ; ?><?= esc($guestbook_item['slug'], 'url') ?>">View article 
                 <br /> &nbsp; &nbsp; &nbsp;
-                <?php echo base_url('public/guestbook_single_view'); ?><?php echo "/" ; ?><?= esc($guestbook_item['slug'], 'url') ?> </a></p>
+                <?php echo base_url('guestbook_single_view'); ?><?php echo "/" ; ?><?= esc($guestbook_item['slug'], 'url') ?> </a></p>
             </div>
         </div>   
             
              <br />
-            <a  href="<?php echo base_url('public/guestbook/delete_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_delete"> Delete</button></a> 
-            <a  href="<?php echo base_url('public/guestbook/update_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_update"> Update</button></a> 
+            <a  href="<?php echo base_url('guestbook/delete_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_delete"> Delete</button></a> 
+            <a  href="<?php echo base_url('guestbook/update_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_update"> Update</button></a> 
              <!-- now we pass id of news article for deletion to controler news and them method  delete_news_article -->
              <br />
              <hr> <br />

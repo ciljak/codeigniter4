@@ -26,7 +26,7 @@ class Users extends BaseController
 
 			if (! $this->validate($rules, $errors)) {
 				$data['validation'] = $this->validator;
-			}else{
+			} else {
 				$model = new UserModel();
 
 				$user = $model->where('email', $this->request->getVar('email'))
@@ -34,7 +34,8 @@ class Users extends BaseController
 
 				$this->setUserSession($user);
 				//$session->setFlashdata('success', 'Successful Registration');
-				return redirect()->to('dashboard');
+				//return redirect()->to('dashboard');
+				return redirect()->to('users/dashboard');
 
 			}
 		}
@@ -97,6 +98,12 @@ class Users extends BaseController
 	}
 
 	public function profile(){
+
+		/* alternate way how to disable access to loget out user from dashboard 
+		if(!session()-> get('isLogedIn'))
+		   redirect()->to('/')
+		
+		*/
 		
 		$data = [];
 		helper(['form']);
@@ -130,7 +137,7 @@ class Users extends BaseController
 				$model->save($newData);
 
 				session()->setFlashdata('success', 'Successfuly Updated');
-				return redirect()->to('/profile');
+				return redirect()->to('profile');
 
 			}
 		}

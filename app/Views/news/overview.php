@@ -19,7 +19,7 @@
                    <?php if (!empty($news_item['picture_name'])): ?>  <!-- if picture is provided it mean we will display in two table column -->
                         <td>
                             <div id="article_image" class="article_image">
-                                <img src="<?=base_url()?>/public/images/<?= esc($news_item['picture_name']) ?>" alt="Article image - <?= esc($news_item['title']) ?> " width="250px" >
+                                <img src="<?=base_url()?>/images/<?= esc($news_item['picture_name']) ?>" alt="Article image - <?= esc($news_item['title']) ?> " width="250px" >
                             </div>
                         </td>
                     <?php endif ?>  
@@ -34,13 +34,13 @@
             <div id="article_hyperlink" class="article_hyperlink">
                 <p><a class="news_article_hyperlink" href="<?php echo base_url('public/news') ; ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?>">View article 
                 <br /> &nbsp; &nbsp; &nbsp;
-                <?php echo base_url('public/news'); ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?> </a></p>
+                <?php echo base_url('news'); ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?> </a></p>
             </div>
         </div>   
             
              <br />
-            <a  href="<?php echo base_url('public/news/delete_news_article/'.$news_item['id']);?> "><button id="input_button_delete"> Delete</button></a> 
-            <a  href="<?php echo base_url('public/news/update_news_article/'.$news_item['id']);?> "><button id="input_button_update"> Update</button></a> 
+            <a  href="<?php echo base_url('news/delete_news_article/'.$news_item['id']);?> "><button id="input_button_delete"> Delete</button></a> 
+            <a  href="<?php echo base_url('news/update_news_article/'.$news_item['id']);?> "><button id="input_button_update"> Update</button></a> 
              <!-- now we pass id of news article for deletion to controler news and them method  delete_news_article -->
              <br />
              <hr> <br />

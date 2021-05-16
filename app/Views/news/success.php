@@ -5,13 +5,13 @@
     <h2>Provided picture info:</h2>
     <h3><?= esc($news['picture_name']) ?></h3>
     <h3><?= esc($news['picture_type']) ?></h3>
-    <img src="<?=base_url()?>/public/images/<?= esc($news['picture_name']) ?>" alt="Currently uploaded image" width="250px" >
+    <img src="<?=base_url()?>/images/<?= esc($news['picture_name']) ?>" alt="Currently uploaded image" width="250px" >
 
     <p>created successfully.</p>
     
 </section>
 
 <section>
-<a href="<?php echo base_url('public/news'); ?>"><button type="button">Return to main news page</button></a> 
+<a href="<?php echo base_url('news'); ?>"><button type="button">Return to main news page</button></a> 
 <!-- bas_url is a way how to generate url consisting of main hostin domain name part and appropriate url denotating controller/method part -->
 </section>
