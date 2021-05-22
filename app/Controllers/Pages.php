@@ -3,6 +3,7 @@
 namespace App\Controllers;
 // here list all models that are necessary for data access in appropriate controller  - because all common pages use this controller models for contact or guestbook must be added here
 use App\Models\GuestbookModel;
+use app\Helpers;
 
 use CodeIgniter\Controller;
 
@@ -15,6 +16,15 @@ class Pages extends Controller
 
     public function view($page = 'home') // controler method responsible for common display of all pages
     {
+
+        // load helpers for photo gallery -  read https://roytuts.com/codeigniter-photo-gallery/
+            // It loads the required helper classes. If you want, you may auto-load them in application/config/auto-load.php file.
+        //$this->load->helper('url');
+		//$this->load->helper('directory');
+        helper('directory');
+        helper('url');
+		//$this->load->view('photo_gallery');
+
         if ( ! is_file(APPPATH.'/Views/pages/'.$page.'.php'))
         {
             // Whoops, we don't have a page for that!

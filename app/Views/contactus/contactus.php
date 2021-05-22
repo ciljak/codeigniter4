@@ -13,7 +13,7 @@
 </p>
 
 <!-- in upper part display form for submiting text in guestbook and bottom part display all messages -->
-<section>
+
     
 
     <?= \Config\Services::validation()->listErrors() ?>
@@ -40,16 +40,16 @@
       </fieldset>
     </form>
 
-</section>
+
 
     
 
     
     <br /> <br /> <br />
 
-    <h1 class="main_h1"><?= esc($title) ?></h1>
+    <h1 class="main_h1"><?= esc($title) ?> - recorded messages yet</h1>
 
-    <?php if (! empty($contactus) && is_array($contactus)) : ?>
+    <?php if (! empty($contactus) && is_array($contactus) && (session()->get('isLoggedIn')) ) : ?>
 
         <?php foreach ($contactus as $contactus_item): ?>
         <div class="article_header">
@@ -78,12 +78,18 @@
              <br />
              <hr> <br />
         <?php endforeach; ?>
+        
+    <?php endif ?>
+    
+
+    <?php if (session()->get('isLoggedIn')) : ?>
+
+        
 
     <?php else : ?>
+        <h3>For reading stored messages you must log in</h3>
 
-        <h3>No contact messages</h3>
-
-        <p>Unable to find any contact messages for you.</p>
+        <p>Please <a href="/users">log in</a>!</p>
 
     <?php endif ?>
 

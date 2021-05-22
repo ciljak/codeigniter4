@@ -1,13 +1,116 @@
 <section>
+    <div class="container">
+	 <div class="row">
 
-<h1 class="main_h1">  About page  - basics of Codeigniter 4 </h1>
+		<div class="col-12">
+			<h1 class="main_h1">  About page  - basics of Codeigniter 4 </h1>
+		</div>	
 
-<p>In this project we will focus on introduction abilities of CodeIgniter 4.</p>
 
-<p>Our pages will use all available abilities of this lightweight framework. For further reading please visit 
-    main project page <a href="https://codeigniter.com/docs"> CodeIgniter project here </a>
-</p>
 
+		<!-- bootstrap formated part - column 12 then divided into 9 and 3 for side nav   -->
+		
+			<div class="col-9">
+				<p>In this project we will focus on introduction abilities of CodeIgniter 4.</p>
+
+				<p>Our pages will use all available abilities of this lightweight framework. For further reading please visit 
+					main project page <a href="https://codeigniter.com/docs"> CodeIgniter project here </a>
+				</p>
+
+				<div class="gallery">
+ 
+				<?php  
+				/*****************
+				 *  jQuery image gallery - https://makitweb.com/make-photo-gallery-from-image-directory-with-php/, 22.5.2021
+				 */
+				// Image extensions
+				$image_extensions = array("png","jpg","jpeg","gif");
+
+				// Target directory
+				$dir = 'gallery/1_about_gallery';
+				if (is_dir($dir)){
+
+				if ($dh = opendir($dir)){
+				$count = 1;
+
+				// Read files
+				while (($file = readdir($dh)) !== false){
+
+					if($file != '' && $file != '.' && $file != '..'){
+
+					// Thumbnail image path
+					$thumbnail_path = "gallery/1_about_gallery/thumbs/".$file;
+					/* Thumbs must be naled as their reference images */
+
+					// Image path
+					$image_path = "gallery/1_about_gallery/".$file;
+
+					$thumbnail_ext = pathinfo($thumbnail_path, PATHINFO_EXTENSION);
+					$image_ext = pathinfo($image_path, PATHINFO_EXTENSION);
+
+					// Check its not folder and it is image file
+					if(!is_dir($image_path) && 
+						in_array($thumbnail_ext,$image_extensions) && 
+						in_array($image_ext,$image_extensions)){
+				?>
+
+					<!-- Image -->
+					<a href="<?php echo $image_path; ?>">
+					<img src="<?php echo $thumbnail_path; ?>" alt="" title=""/>
+					
+					</a>
+					<!-- --- -->
+					<?php
+
+					// Break
+					if( $count%4 == 0){
+					?>
+						<div class="clear"></div>
+					<?php 
+					}
+					$count++;
+					}
+					}
+
+				}
+				closedir($dh);
+				}
+				}
+				?>
+				</div>
+
+			</div>
+
+			<div class="col-3">
+				<?php if (session()->get('isLoggedIn')): ?> 
+				<h2>Private zone</h2>
+				<ul class="nav flex-column">  <!-- bootstrap styling https://getbootstrap.com/docs/5.0/components/navs-tabs/ -->
+					
+					<li class="menu-item hidden"><a href="<?php echo base_url('users/profile') ; ?>">Update profile</a></li>
+					<li class="menu-item hidden"><a href="<?php echo base_url('users/logout') ; ?>">Logout</a></li>
+				</ul>
+				</br></br>
+				<?php endif; ?> 
+				<h2>Menu options</h2>
+					<ul class="nav flex-column">
+					
+					<!-- base_url inserts part defined in .env config file consists of main url part that can be easy chenged along hosting migration -->
+					<li class="menu-item hidden"><a href="<?php echo base_url('about') ; ?>">About</a></li>
+					<li class="menu-item hidden"><a href="<?php echo base_url('news') ; ?>">News</a></li>
+					<li class="menu-item hidden"><a href="<?php echo base_url('guestbook') ; ?>">Guestbook</a></li>
+					<li class="menu-item hidden"><a href="https://codeigniter4.github.io/userguide/" target="_blank">Docs</a>
+					</li>
+					<li class="menu-item hidden"><a href="https://forum.codeigniter.com/" target="_blank">Community</a></li>
+					<li class="menu-item hidden"><a href="<?php echo base_url('contactus') ; ?>">Contact us</a></li>
+					
+					</ul>
+				</div>
+	     
+	  </div>
+    </div>
+
+
+<!-- section and further class from original CodeIgniter 4 demo styling of document  -->
 </section>
 
 <div class="further">

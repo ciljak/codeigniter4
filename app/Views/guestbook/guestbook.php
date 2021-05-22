@@ -3,7 +3,7 @@
 <h1 class="main_h1"> Guestbook </h1>
 
 <!-- in upper part display form for submiting text in guestbook and bottom part display all messages -->
-<section>
+
     
 
     <?= \Config\Services::validation()->listErrors() ?>
@@ -22,7 +22,7 @@
         <input type="input" name="email" /><br />
 
         <label for="message_text">Message text</label>
-        <textarea id="textarea_styled" name="message_text"></textarea><br />
+        <textarea id="textarea_styled" name="message_text" cols="50" rows="5"></textarea><br />
 
         <label for="formGroupExampleInput">Article picture: </label>
         <input type="file" name="guestbook_image_file" class="form-control" id="guestbook_image_file" onchange="readURL(this);" accept=".png, .jpg, .jpeg" /> <br />
@@ -31,7 +31,7 @@
       </fieldset>
     </form>
 
-</section>
+
 
     
 
