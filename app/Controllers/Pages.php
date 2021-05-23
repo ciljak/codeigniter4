@@ -3,6 +3,7 @@
 namespace App\Controllers;
 // here list all models that are necessary for data access in appropriate controller  - because all common pages use this controller models for contact or guestbook must be added here
 use App\Models\GuestbookModel;
+use App\Models\NewsModel;
 use app\Helpers;
 
 use CodeIgniter\Controller;
@@ -48,11 +49,25 @@ class Pages extends Controller
                     echo view('pages/guestbook', $data );
                     echo view('templates/footer');
                 }
-                case "delete_guestbook_article"  :
-                    {
-                        delete_guestbook_article($id);
-                    }    
-               break; //optional - for next pages that need obtain data from model representing a data stored in a database */
+            case "delete_guestbook_article"  :
+                {
+                    delete_guestbook_article($id);
+                } 
+            case "about"  :
+                {
+                $model = new NewsModel();
+    
+                $data = [
+                    'news'  => $model->getLatestNews(),
+                    'title' => 'News archive',
+                ];
+            
+            
+                    echo view('templates/header', ['title' => 'Guestbook']);
+                    echo view('pages/about', $data );
+                    echo view('templates/footer');
+                }        
+            break; //optional - for next pages that need obtain data from model representing a data stored in a database */
            // case constant-expression  :
              //  statement(s);
             //   break; //optional

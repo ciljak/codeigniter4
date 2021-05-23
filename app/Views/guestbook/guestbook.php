@@ -88,7 +88,10 @@
     <?php endif ?>
 
 
-
+    <?= $pager->links() 
+        // CodeIgniter 4 pagination https://www.bookstack.cn/read/codeigniter4-en/2bd0095ae8b900bb.md ,
+                       //how to style links https://stackoverflow.com/questions/30096942/how-to-style-pagination-links-without-config-codeigniter, 23.5.21
+        ?> 
 
 
 

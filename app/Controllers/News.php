@@ -5,6 +5,11 @@ namespace App\Controllers;
 use App\Models\NewsModel;
 use CodeIgniter\Controller;
 
+/*********************************
+ *  Pagination in code igniter - for further reference please visit https://codeigniter.com/user_guide/libraries/pagination.html, 23.5.2021
+ */
+$pager = \Config\Services::pager();
+
 //$image = Config\Services::image();
 // for image handling please refer this article https://www.nicesnippets.com/blog/codeigniter-4-image-upload-with-preview-example, 1.5.2021
 
@@ -15,9 +20,19 @@ class News extends Controller
         $model = new NewsModel();
     
         $data = [
-            'news'  => $model->getNews(),
+            //'news'  => $model->getNews(),
             'title' => 'News archive',
+            'news' => $model->paginate(3),
+            'pager' => $model->pager,
         ];
+
+        /* pagination config */
+        /* Customizing the Links
+           View Configuration
+           When the links are rendered out to the page, they use a view file to describe the HTML. You can easily change the view that is used by editing app/Config/Pager.php:
+        */
+
+        
     
         echo view('templates/header', $data);
         echo view('news/overview', $data);

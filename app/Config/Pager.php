@@ -21,7 +21,8 @@ class Pager extends BaseConfig
 	 * @var array<string, string>
 	 */
 	public $templates = [
-		'default_full'   => 'CodeIgniter\Pager\Views\default_full',
+		//'default_full'   => 'CodeIgniter\Pager\Views\default_full',
+		'default_full'   => 'App\Views\Pagers\our_full_pager_template', // we edit that links for customisation of the view https://codeigniter.com/user_guide/libraries/pagination.html
 		'default_simple' => 'CodeIgniter\Pager\Views\default_simple',
 		'default_head'   => 'CodeIgniter\Pager\Views\default_head',
 	];
@@ -35,5 +36,5 @@ class Pager extends BaseConfig
 	 *
 	 * @var integer
 	 */
-	public $perPage = 20;
+	public $perPage = 10;
 }

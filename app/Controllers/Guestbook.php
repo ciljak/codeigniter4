@@ -6,6 +6,11 @@ use App\Models\GuestbookModel;
 
 use CodeIgniter\Controller;
 
+/*********************************
+ *  Pagination in code igniter - for further reference please visit https://codeigniter.com/user_guide/libraries/pagination.html, 23.5.2021
+ */
+$pager = \Config\Services::pager();
+
 class Guestbook extends Controller
 {
     public function index()
@@ -13,7 +18,9 @@ class Guestbook extends Controller
         $model = new GuestbookModel();
 
         $data = [
-            'guestbook'  => $model->getGuestPosts(),
+            //'guestbook'  => $model->getGuestPosts(),
+            'guestbook' => $model->paginate(5),
+            'pager' => $model->pager,
             
         ];
         

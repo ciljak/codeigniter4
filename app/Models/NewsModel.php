@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+helper('array');
 
 class NewsModel extends Model
 {
@@ -15,6 +16,30 @@ class NewsModel extends Model
         if ($slug === false)
         {
             return $this->findAll(); // helper methods used by Query builder
+        }
+
+        return $this->asArray()
+                    ->where(['slug' => $slug])
+                    ->first();       // helper methods used by Query builder
+    }
+
+    public function getLatestNews($slug = false)
+    {
+        if ($slug === false)
+        {
+            // create connection to a database - for further reading please visit - https://codeigniter.com/user_guide/database/query_builder.html, 23.5.2021
+            $db      = \Config\Database::connect();
+            $builder = $db->table('news');
+
+            //$builder->selectMax('id');
+            $builder->orderBy('id', 'DESC'); // order from latest to older
+            $builder->limit(2); // return latest two articles
+           
+
+           return $builder->get()->getResultArray();
+            
+          
+            
         }
 
         return $this->asArray()

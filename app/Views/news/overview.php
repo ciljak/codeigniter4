@@ -32,19 +32,26 @@
             </table>
             <!-- old version <p><a href="/news/<?= esc($news_item['slug'], 'url') ?>">View article</a></p>  without base url -->
             <div id="article_hyperlink" class="article_hyperlink">
-                <p><a class="news_article_hyperlink" href="<?php echo base_url('public/news') ; ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?>">View article 
+                <p><a class="news_article_hyperlink" href="<?php echo base_url('news') ; ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?>">View article 
                 <br /> &nbsp; &nbsp; &nbsp;
                 <?php echo base_url('news'); ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?> </a></p>
             </div>
         </div>   
-            
+          <?php if (session()->get('isLoggedIn')): ?>
              <br />
             <a  href="<?php echo base_url('news/delete_news_article/'.$news_item['id']);?> "><button id="input_button_delete"> Delete</button></a> 
             <a  href="<?php echo base_url('news/update_news_article/'.$news_item['id']);?> "><button id="input_button_update"> Update</button></a> 
              <!-- now we pass id of news article for deletion to controler news and them method  delete_news_article -->
              <br />
-             <hr> <br />
+             
+            <?php endif ?>
+            <hr> <br />
+
         <?php endforeach; ?>
+        <?= $pager->links() 
+        // CodeIgniter 4 pagination https://www.bookstack.cn/read/codeigniter4-en/2bd0095ae8b900bb.md ,
+                       //how to style links https://stackoverflow.com/questions/30096942/how-to-style-pagination-links-without-config-codeigniter, 23.5.21
+        ?> 
 
     <?php else : ?>
 
