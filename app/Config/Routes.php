@@ -64,7 +64,8 @@ $routes->match(['get', 'post'], 'contactus/delete_contactus_article/(:segment)',
 $routes->match(['get', 'post'], 'contactus/update_contactus_article/(:segment)', 'Contactus::update_contactus_article/$1'); // for routing to controller responsible for news article update
 
 $routes->get('news/(:segment)', 'News::view/$1');  // for routing to news implemented along provided tutorial of code igniter
-$routes->get('public/guestbook_single_view(:segment)', 'Pages:guestbook_single_view/$1');  // for routing to news implemented along provided tutorial of code igniter
+//$routes->get('public/guestbook_single_view(:segment)', 'Pages:guestbook_single_view/$1');  // for routing to news implemented along provided tutorial of code igniter
+$routes->get('guestbook/guestbook_single_view/(:segment)', 'Guestbook::guestbook_single_view/$1');  // for routing to news implemented along provided tutorial of code igniter
 
 // personal part for loged in users - users
 //$routes->get('logout', 'Users::logout');

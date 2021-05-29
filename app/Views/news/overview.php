@@ -37,13 +37,26 @@
                 <?php echo base_url('news'); ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?> </a></p>
             </div>
         </div>   
-          <?php if (session()->get('isLoggedIn')): ?>
+             <?php  // debug - for testing purpouses
+                        //echo "article users id: ". $news_item['user_id'];
+                        //echo "session users id: ". session()->get('id');
+             ?>
+          <?php if ((session()->get('isLoggedIn')) && ( (session()->get('id'))==$news_item['user_id']) || (session()->get('role')=="admin")): 
+            //loged in and is owner or admin ?>
              <br />
+             
             <a  href="<?php echo base_url('news/delete_news_article/'.$news_item['id']);?> "><button id="input_button_delete"> Delete</button></a> 
             <a  href="<?php echo base_url('news/update_news_article/'.$news_item['id']);?> "><button id="input_button_update"> Update</button></a> 
              <!-- now we pass id of news article for deletion to controler news and them method  delete_news_article -->
              <br />
-             
+             <?php elseif ((session()->get('isLoggedIn')) && ( (session()->get('id'))!=$news_item['user_id']) ): 
+                // loged in but not owner of article and also not admin?>
+             <p>Only owner user or administrator can edit this article - please logout and login with appropriate user rights here:  <a  href="<?php echo base_url('users/logout/');?> "> logout</a></p>
+            
+             <?php else : 
+                // coomon unloged user?>
+             <p>Only loged in owner users or administrators can edit articles -  <a  href="<?php echo base_url('users/');?> "> login</a> </p>
+            
             <?php endif ?>
             <hr> <br />
 

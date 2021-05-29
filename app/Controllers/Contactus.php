@@ -5,6 +5,10 @@ namespace App\Controllers;
 use App\Models\ContactusModel;
 
 use CodeIgniter\Controller;
+/*********************************
+ *  Pagination in code igniter - for further reference please visit https://codeigniter.com/user_guide/libraries/pagination.html, 23.5.2021
+ */
+$pager = \Config\Services::pager();
 
 class Contactus extends Controller
 {
@@ -13,7 +17,9 @@ class Contactus extends Controller
         $model = new ContactusModel();
 
         $data = [
-            'contactus'  => $model->getContactusPosts(),
+           // 'contactus'  => $model->getContactusPosts(),
+           'contactus' => $model->orderBy('id', 'DESC')->paginate(5), // after use pagination, ordering must be implemented here - method in model is not used
+           'pager' => $model->pager,
             
         ];
         
@@ -97,6 +103,7 @@ class Contactus extends Controller
                         'name' => $this->request->getPost('name'),
                         'email' => $this->request->getPost('email'),
                         'message_text'  => $this->request->getPost('message_text'),
+                        'user_id'  => session()->get('id'), // user id passed to a sesion
                         
                 ]);    
                 
@@ -105,7 +112,9 @@ class Contactus extends Controller
                 
                 // part responsible for reading all guestbook osts and passing them into a view
                 $data = [
-                    'contactus'  => $model->getContactusPosts(),
+                    //'contactus'  => $model->getContactusPosts(),
+                    'contactus' => $model->orderBy('id', 'DESC')->paginate(5), // after use pagination, ordering must be implemented here - method in model is not used
+                    'pager' => $model->pager,
                     
                 ];
     

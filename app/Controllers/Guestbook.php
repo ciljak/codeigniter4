@@ -19,7 +19,7 @@ class Guestbook extends Controller
 
         $data = [
             //'guestbook'  => $model->getGuestPosts(),
-            'guestbook' => $model->paginate(5),
+            'guestbook' => $model->orderBy('id', 'DESC')->paginate(5), // after use pagination, ordering must be implemented here - method in model is not used
             'pager' => $model->pager,
             
         ];
@@ -111,14 +111,44 @@ class Guestbook extends Controller
                 $guestbook_image = $guestbook_image->move('./images', $newName); //picture is moved into a images folder nested in public folder
                 
                 // The move() method returns a new File instance that for the relocated file, so you must capture the result if the resulting location is needed:
-                $model->save([
+                    if(session()->get('id')== null) { // anonymous user - not loged in
+                        $model->save([
+                            'name_of_writer' => $this->request->getPost('name_of_writer'),
+                            'email' => $this->request->getPost('email'),
+                            'slug'  => url_title($this->request->getPost('name_of_writer'), '-', TRUE),
+                            'message_text'  => $this->request->getPost('message_text'),
+                            'picture_name' => $newName, //$newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
+                            'picture_type'  => $guestbook_image_type,
+                            'user_id'  => '0' 
+                           , // user id passed to a sesion
+    
+                        ]);
+                    } else { // loged in user - session contains their user_id or id
+                        $model->save([
+                            'name_of_writer' => $this->request->getPost('name_of_writer'),
+                            'email' => $this->request->getPost('email'),
+                            'slug'  => url_title($this->request->getPost('name_of_writer'), '-', TRUE),
+                            'message_text'  => $this->request->getPost('message_text'),
+                            'picture_name' => $newName, //$newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
+                            'picture_type'  => $guestbook_image_type,
+                            'user_id'  => session()->get('id')
+                           , // user id passed to a sesion
+    
+                       ]);
+                        
+                    };
+
+              /*  $model->save([
                         'name_of_writer' => $this->request->getPost('name_of_writer'),
                         'email' => $this->request->getPost('email'),
                         'slug'  => url_title($this->request->getPost('name_of_writer'), '-', TRUE),
                         'message_text'  => $this->request->getPost('message_text'),
                         'picture_name' => $newName, //$newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
-                        'picture_type'  => $guestbook_image_type
-                ]);    
+                        'picture_type'  => $guestbook_image_type,
+                        'user_id'  => '0' 
+                       , // user id passed to a sesion
+
+                ]);   */ 
                 
                 //$data['news'] = $model->getLatest(); this approach does not work because i cann note order_by and take first() element but all data ara available 
                 // and can by simply passed by on from send post
@@ -134,7 +164,9 @@ class Guestbook extends Controller
                 
                 // part responsible for reading all guestbook osts and passing them into a view
                 $data = [
-                    'guestbook'  => $model->getGuestPosts(),
+                  //  'guestbook'  => $model->getGuestPosts(),
+                    'guestbook' => $model->paginate(5),
+                    'pager' => $model->pager,
                     
                 ];
     

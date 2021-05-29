@@ -22,7 +22,7 @@
         <label for="formGroupExampleInput">Article picture: </label>
         <input type="file" name="guestbook_image_file" class="form-control" id="guestbook_image_file" onchange="readURL(this);" accept=".png, .jpg, .jpeg" /> <br />
 
-        <input id="input_button_create" type="submit" name="submit" value="Write new post" />
+        <input id="input_button_create" type="submit" name="submit" value="Upadte post" />
       </fieldset>
     </form>
 
@@ -31,6 +31,6 @@
 </section>
 
 <section>
-<a href="<?php echo base_url('guestbook'); ?>"><button type="button">Return to main news page</button></a> 
+<a href="<?php echo base_url('guestbook'); ?>"><button type="button">Return to main guestbook page</button></a> 
 <!-- bas_url is a way how to generate url consisting of main hostin domain name part and appropriate url denotating controller/method part -->
 </section>

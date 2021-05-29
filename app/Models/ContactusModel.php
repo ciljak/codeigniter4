@@ -8,7 +8,7 @@ class ContactusModel extends Model
 {
     protected $table = 'contact';
 
-    protected $allowedFields = ['id','name', 'write_date', 'email','message_text'];
+    protected $allowedFields = ['id','name', 'write_date', 'email','message_text', 'user_id'];
 
     public function getContactusPosts($name = false)
     {

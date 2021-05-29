@@ -22,7 +22,7 @@ class News extends Controller
         $data = [
             //'news'  => $model->getNews(),
             'title' => 'News archive',
-            'news' => $model->paginate(3),
+            'news' => $model->orderBy('id', 'DESC')->paginate(3),
             'pager' => $model->pager,
         ];
 

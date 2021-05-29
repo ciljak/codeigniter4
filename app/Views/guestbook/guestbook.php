@@ -8,7 +8,7 @@
 
     <?= \Config\Services::validation()->listErrors() ?>
 
-    <form enctype="multipart/form-data" action="<?php echo base_url('public/guestbook/guestbook_add_post/'); ?>" method="post"> <!-- guestbook_add_post $_SERVER['PHP_SELF'] -->
+    <form enctype="multipart/form-data" action="<?php echo base_url('/guestbook/guestbook_add_post/'); ?>" method="post"> <!-- guestbook_add_post $_SERVER['PHP_SELF'] -->
         <?= csrf_field() ?>
         <!-- There are probably only two things here that look unfamiliar. 
         The \Config\Services::validation()->listErrors() function is used to report errors related to form validation. 
@@ -16,10 +16,10 @@
       <fieldset>
         <legend><?= esc($title) ?></legend>
         <label for="name_of_writer">From - name/ nic</label>
-        <input type="input" name="name_of_writer" /><br />
+        <input type="input" name="name_of_writer" value="<?php echo session()->get('firstname') . " " .session()->get('lastanem'); ?>" /><br />
 
 		<label for="e-mail">E-mail</label>
-        <input type="input" name="email" /><br />
+        <input type="input" name="email" value="<?php echo session()->get('email') ; ?>"/><br />
 
         <label for="message_text">Message text</label>
         <textarea id="textarea_styled" name="message_text" cols="50" rows="5"></textarea><br />
@@ -65,16 +65,29 @@
             </table>
             
             <div id="article_hyperlink" class="article_hyperlink">
-                <p><a class="news_article_hyperlink" href="<?php echo base_url('public/guestbook_single_view'); ?><?php echo "/" ; ?><?= esc($guestbook_item['slug'], 'url') ?>">View article 
+                <p><a class="news_article_hyperlink" href="<?php echo base_url('guestbook/guestbook_single_view'); ?><?php echo "/" ; ?><?= esc($guestbook_item['slug'], 'url') ?>">View article 
                 <br /> &nbsp; &nbsp; &nbsp;
                 <?php echo base_url('guestbook_single_view'); ?><?php echo "/" ; ?><?= esc($guestbook_item['slug'], 'url') ?> </a></p>
             </div>
         </div>   
             
+       
+
              <br />
+             <?php if ((session()->get('isLoggedIn')) && ( (session()->get('id'))==$guestbook_item['user_id']) || (session()->get('role')=="admin")): 
+            //loged in and is owner or admin ?>
             <a  href="<?php echo base_url('guestbook/delete_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_delete"> Delete</button></a> 
             <a  href="<?php echo base_url('guestbook/update_guestbook_article/'.$guestbook_item['id']);?> "><button id="input_button_update"> Update</button></a> 
              <!-- now we pass id of news article for deletion to controler news and them method  delete_news_article -->
+             <?php elseif ((session()->get('isLoggedIn')) && ( (session()->get('id'))!=$guestbook_item['user_id']) ): 
+                // loged in but not owner of article and also not admin?>
+             <p>Only owner user or administrator can edit this article - please logout and login with appropriate user rights here:  <a  href="<?php echo base_url('users/logout/');?> "> logout</a></p>
+            
+             <?php else : 
+                // coomon unloged user?>
+             <p>Only loged in owner users or administrators can edit articles -  <a  href="<?php echo base_url('users/');?> "> login</a> </p>
+            
+            <?php endif ?>
              <br />
              <hr> <br />
         <?php endforeach; ?>

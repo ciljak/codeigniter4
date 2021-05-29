@@ -51,6 +51,7 @@ class Users extends BaseController
 			'firstname' => $user['firstname'],
 			'lastname' => $user['lastname'],
 			'email' => $user['email'],
+			'role' => $user['role'], // for beter diferentiation among user roles new column in user table has been introduced - role (amin, user are the basic roles)
 			'isLoggedIn' => true,
 		];
 
@@ -67,26 +68,35 @@ class Users extends BaseController
 			$rules = [
 				'firstname' => 'required|min_length[3]|max_length[20]',
 				'lastname' => 'required|min_length[3]|max_length[20]',
-				'email' => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
+				'email' => 'required|min_length[3]|max_length[50]|valid_email|is_unique[users.email]',
 				'password' => 'required|min_length[8]|max_length[255]',
 				'password_confirm' => 'matches[password]',
 			];
 
 			if (! $this->validate($rules)) {
 				$data['validation'] = $this->validator;
-			}else{
+				//echo "We obtainted these data";
+                //echo "email". $this->request->getVar('email');
+			    //echo "password". $this->request->getVar('password');
+			    //echo "password_confirm". $this->request->getVar('password_confirm');
+				return redirect()->to('/users/register');
+			} else {
 				$model = new UserModel();
+				echo " We obtainted these data";
 
 				$newData = [
 					'firstname' => $this->request->getVar('firstname'),
 					'lastname' => $this->request->getVar('lastname'),
 					'email' => $this->request->getVar('email'),
 					'password' => $this->request->getVar('password'),
+					'role' => 'user', //default registered user role is user - only admin can change role for user
+
 				];
 				$model->save($newData);
 				$session = session();
 				$session->setFlashdata('success', 'Successful Registration');
 				return redirect()->to('/');
+				
 
 			}
 		}
