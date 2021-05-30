@@ -9,7 +9,7 @@ class NewsModel extends Model
 {
     protected $table = 'news';
 
-    protected $allowedFields = ['id','title', 'slug', 'body','picture_name', 'picture_type', 'user_id' ];
+    protected $allowedFields = ['id','title', 'slug', 'body','picture_name', 'picture_type', 'user_id', 'is_published' ];
 
     public function getNews($slug = false)
     {
@@ -47,7 +47,7 @@ class NewsModel extends Model
                     ->first();       // helper methods used by Query builder
     }
 
-    public function getLatest() // return latest added item into a database
+    public function getLatest() // return latest added item into a database - not good example - bad tray
     {
        
        
@@ -77,4 +77,14 @@ class NewsModel extends Model
                     ->where(['id' => $id])
                     ->first();       // helper methods used by Query builder
     }
+
+    public function publish_news_article($id) // publish article - is_published chante to 1
+     {
+        
+
+        return $this->asArray()
+                    ->where(['id' => $id])
+                    ->first();       // helper methods used by Query builder
+    }
+
 }

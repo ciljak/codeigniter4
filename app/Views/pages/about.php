@@ -144,6 +144,12 @@
 					<li class="menu-item hidden"><a href="<?php echo base_url('contactus') ; ?>">Contact us</a></li>
 					
 					</ul>
+
+					<h2>About project</h2>	
+
+					<ul class="nav flex-column">
+					<li class="menu-item hidden"><a href="<?php echo base_url('project_milestones') ; ?>">Project milestones</a></li>
+				    </ul>
 				</div>
 	     
 	  </div>

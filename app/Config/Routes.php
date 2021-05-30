@@ -50,6 +50,9 @@ $routes->get('users/dashboard', 'Dashboard::index',['filter' => 'auth']);
 $routes->match(['get', 'post'], 'news/create', 'News::create'); // for routing to page creating new articles in news
 $routes->match(['get', 'post'], 'news/delete_news_article/(:segment)', 'News::delete_news_article/$1'); // for routing to controller responsible for deletion
 $routes->match(['get', 'post'], 'news/update_news_article/(:segment)', 'News::update_news_article/$1'); // for routing to controller responsible for news article update
+$routes->match(['get', 'post'], 'news/publish_news_article/(:segment)', 'News::publish_news_article/$1'); // for routing to controller responsible for news article publishing
+$routes->match(['get', 'post'], 'news/unpublish_news_article/(:segment)', 'News::unpublish_news_article/$1'); // for routing to controller responsible for news article unpublishing
+
 
 //gustbook routing
 $routes->match(['get', 'post'], 'guestbook/guestbook_add_post', 'Guestbook::guestbook_add_post'); // for routing to controller responsible for news article update

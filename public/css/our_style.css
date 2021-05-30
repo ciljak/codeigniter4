@@ -231,9 +231,9 @@ button:hover {
 }
 
 .article_header {
-    color: rgba(221, 72, 20, .8);
+    color: rgba(75, 75, 75, 0.8);
     padding-left: 5px;
-    border-left: 5px solid rgba(221, 72, 20, .8);
+    border-left: 5px solid rgba(75, 75, 75, 0.8);
 
 }
 
@@ -241,6 +241,12 @@ button:hover {
     color: white;
     background-color:  rgba(221, 72, 20, .8) ;
     padding: 20px 10px 20px 10px;
+
+    -webkit-border-radius: 0px 20px 0px 0px;
+    border-radius: 0px 20px 0px 0px;
+
+    -webkit-box-shadow: 1px 1px 4px 1px rgba(0,0,0,0.52); 
+    box-shadow: 1px 1px 4px 1px rgba(0,0,0,0.52);
     
 }
 

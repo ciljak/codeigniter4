@@ -19,12 +19,27 @@ class News extends Controller
     {
         $model = new NewsModel();
     
-        $data = [
+       
+
+        if(session()->get('role') == 'admin') { // if admin loged in thend dont filter published but display all to ability manage them
+            $data = [
+                //'news'  => $model->getNews(),
+                'title' => 'News archive',
+                'news' => $model->orderBy('id', 'DESC')->paginate(3),
+                'pager' => $model->pager,
+            ];
+    
+        } else { // coomon user see only published articles
+
+           $data = [
             //'news'  => $model->getNews(),
             'title' => 'News archive',
-            'news' => $model->orderBy('id', 'DESC')->paginate(3),
+            'news' => $model->where('is_published', '1')->orderBy('id', 'DESC')->paginate(3),
             'pager' => $model->pager,
         ];
+
+            
+        };
 
         /* pagination config */
         /* Customizing the Links
@@ -84,13 +99,28 @@ class News extends Controller
             $news_image = $news_image->move('./images', $newName); //picture is moved into a images folder nested in public folder
             
             // The move() method returns a new File instance that for the relocated file, so you must capture the result if the resulting location is needed:
-            $model->save([
-                    'title' => $this->request->getPost('title'),
-                    'slug'  => url_title($this->request->getPost('title'), '-', TRUE),
-                    'body'  => $this->request->getPost('body'),
-                    'picture_name' => $newName, //$newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
-                    'picture_type'  => $news_image_type
-            ]);    
+                if(session()->get('id')== null) { // anonymous user - not loged in
+                    $model->save([
+                        'title' => $this->request->getPost('title'),
+                        'slug'  => url_title($this->request->getPost('title'), '-', TRUE),
+                        'body'  => $this->request->getPost('body'),
+                        'picture_name' => $newName, //$newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
+                        'picture_type'  => $news_image_type,
+                        'user_id'  => '0' 
+                    ]);    
+                } else { // loged in user - session contains their user_id or id
+                    $model->save([
+                        'title' => $this->request->getPost('title'),
+                        'slug'  => url_title($this->request->getPost('title'), '-', TRUE),
+                        'body'  => $this->request->getPost('body'),
+                        'picture_name' => $newName, //$newName , //$newName, //  or if orignal upload name is $news_image->usedgetClientName(),
+                        'picture_type'  => $news_image_type,
+                        'user_id'  => session()->get('id')
+                    ]);    
+                    
+                };
+
+           
             
             //$data['news'] = $model->getLatest(); this approach does not work because i cann note order_by and take first() element but all data ara available 
             // and can by simply passed by on from send post
@@ -206,4 +236,87 @@ class News extends Controller
            
     
             }
+
+    public function publish_news_article($id) // publish article - is_published chante to 1
+    {
+        
+        //find record with appropriate id and change value of item
+       // $model->where('id', $id)->set('is_published', '1');
+
+       // rework this part - how to update only one field in row
+                $db      = \Config\Database::connect();
+                $builder = $db->table('news');
+    
+                //$builder->selectMax('id');
+                $builder->where('id', $id)->set('is_published', '1');
+                $builder->insert();
+
+        // send data after publishing to view
+        $model = new NewsModel();
+    
+        if(session()->get('role') == 'admin') { // if admin loged in thend dont filter published but display all to ability manage them
+            $data = [
+                //'news'  => $model->getNews(),
+                'title' => 'News archive',
+                'news' => $model->orderBy('id', 'DESC')->paginate(3),
+                'pager' => $model->pager,
+            ];
+    
+        } else { // coomon user see only published articles
+
+           $data = [
+            //'news'  => $model->getNews(),
+            'title' => 'News archive',
+            'news' => $model->where('is_published', '1')->orderBy('id', 'DESC')->paginate(3),
+            'pager' => $model->pager,
+           ];
+        
+        };
+
+       
+
+        echo view('templates/header');
+        echo view('news/overview', $data ); // return into main news page 
+        echo view('templates/footer');
+    }   
+    
+    public function unpublish_news_article($id) // unpublish article - is_published chante to 1
+    {
+        
+        //find record with appropriate id and change value of item
+        // $model->where('id', $id)->set('is_published', '0');
+        $db      = \Config\Database::connect();
+        $builder = $db->table('news');
+
+        //$builder->selectMax('id');
+        $builder->where('id', $id)->set('is_published', '0');
+        $builder->insert();
+
+        // send data after publishing to view
+        $model = new NewsModel();
+    
+        if(session()->get('role') == 'admin') { // if admin loged in thend dont filter published but display all to ability manage them
+            $data = [
+                //'news'  => $model->getNews(),
+                'title' => 'News archive',
+                'news' => $model->orderBy('id', 'DESC')->paginate(3),
+                'pager' => $model->pager,
+            ];
+    
+        } else { // coomon user see only published articles
+
+           $data = [
+            //'news'  => $model->getNews(),
+            'title' => 'News archive',
+            'news' => $model->where('is_published', '1')->orderBy('id', 'DESC')->paginate(3),
+            'pager' => $model->pager,
+           ];
+        
+        };
+
+
+        echo view('templates/header');
+        echo view('news/overview', $data ); // return into main news page 
+        echo view('templates/footer');
+    }        
 }
