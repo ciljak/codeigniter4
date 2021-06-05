@@ -47,24 +47,24 @@ $routes->get('users/dashboard', 'Dashboard::index',['filter' => 'auth']);
 
 
 // here we add our routes - CL 18.4.21
-$routes->match(['get', 'post'], 'news/create', 'News::create'); // for routing to page creating new articles in news
-$routes->match(['get', 'post'], 'news/delete_news_article/(:segment)', 'News::delete_news_article/$1'); // for routing to controller responsible for deletion
-$routes->match(['get', 'post'], 'news/update_news_article/(:segment)', 'News::update_news_article/$1'); // for routing to controller responsible for news article update
-$routes->match(['get', 'post'], 'news/publish_news_article/(:segment)', 'News::publish_news_article/$1'); // for routing to controller responsible for news article publishing
-$routes->match(['get', 'post'], 'news/unpublish_news_article/(:segment)', 'News::unpublish_news_article/$1'); // for routing to controller responsible for news article unpublishing
+$routes->match(['get', 'post'], 'news/create', 'News::create',['filter' => 'auth']); // for routing to page creating new articles in news - auth filter redirects all atempts for access to main index page for aunauthorized users
+$routes->match(['get', 'post'], 'news/delete_news_article/(:segment)', 'News::delete_news_article/$1',['filter' => 'auth']); // for routing to controller responsible for deletion
+$routes->match(['get', 'post'], 'news/update_news_article/(:segment)', 'News::update_news_article/$1',['filter' => 'auth']); // for routing to controller responsible for news article update
+$routes->match(['get', 'post'], 'news/publish_news_article/(:segment)', 'News::publish_news_article/$1',['filter' => 'auth']); // for routing to controller responsible for news article publishing
+$routes->match(['get', 'post'], 'news/unpublish_news_article/(:segment)', 'News::unpublish_news_article/$1',['filter' => 'auth']); // for routing to controller responsible for news article unpublishing
 
 
 //gustbook routing
 $routes->match(['get', 'post'], 'guestbook/guestbook_add_post', 'Guestbook::guestbook_add_post'); // for routing to controller responsible for news article update
-$routes->match(['get', 'post'], 'guestbook/delete_guestbook_article/(:segment)', 'Guestbook::delete_guestbook_article/$1'); // for routing to controller responsible for deletion
+$routes->match(['get', 'post'], 'guestbook/delete_guestbook_article/(:segment)', 'Guestbook::delete_guestbook_article/$1',['filter' => 'auth']); // for routing to controller responsible for deletion
 //$routes->get( 'pages/delete_guestbook_article/(:segment)', 'Pages::delete_guestbook_article/$1'); // for routing to controller responsible for deletion
-$routes->match(['get', 'post'], 'guestbook/update_guestbook_article/(:segment)', 'Guestbook::update_guestbook_article/$1'); // for routing to controller responsible for news article update
+$routes->match(['get', 'post'], 'guestbook/update_guestbook_article/(:segment)', 'Guestbook::update_guestbook_article/$1',['filter' => 'auth']); // for routing to controller responsible for news article update
 
 //contact us routing - CL 9.5.2021
 $routes->match(['get', 'post'], 'contactus/contactus_add_post', 'Contactus::contactus_add_post'); // for routing to controller responsible for news article update
-$routes->match(['get', 'post'], 'contactus/delete_contactus_article/(:segment)', 'Contactus::delete_contactus_article/$1'); // for routing to controller responsible for deletion
+$routes->match(['get', 'post'], 'contactus/delete_contactus_article/(:segment)', 'Contactus::delete_contactus_article/$1',['filter' => 'auth']); // for routing to controller responsible for deletion
 //$routes->get( 'pages/delete_guestbook_article/(:segment)', 'Pages::delete_guestbook_article/$1'); // for routing to controller responsible for deletion
-$routes->match(['get', 'post'], 'contactus/update_contactus_article/(:segment)', 'Contactus::update_contactus_article/$1'); // for routing to controller responsible for news article update
+$routes->match(['get', 'post'], 'contactus/update_contactus_article/(:segment)', 'Contactus::update_contactus_article/$1',['filter' => 'auth']); // for routing to controller responsible for news article update
 
 $routes->get('news/(:segment)', 'News::view/$1');  // for routing to news implemented along provided tutorial of code igniter
 //$routes->get('public/guestbook_single_view(:segment)', 'Pages:guestbook_single_view/$1');  // for routing to news implemented along provided tutorial of code igniter

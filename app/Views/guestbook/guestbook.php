@@ -94,9 +94,9 @@
 
     <?php else : ?>
 
-        <h3>No News</h3>
+        <h3>No guestbook entries</h3>
 
-        <p>Unable to find any news for you.</p>
+        <p>Unable to find any guestbook posts for you.</p>
 
     <?php endif ?>
 

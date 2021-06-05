@@ -237,6 +237,15 @@ button:hover {
 
 }
 
+.article_header_about {
+    color: rgba(75, 75, 75, 0.8);
+    padding-left: 10px;
+    border-left: 35px solid rgba(75, 75, 75, 0.8);
+    border-right: 35px solid rgba(75, 75, 75, 0.8);
+
+}
+
+
 .article_body {
     color: white;
     background-color:  rgba(221, 72, 20, .8) ;
@@ -252,8 +261,18 @@ button:hover {
 
 .article_body_about {
     color: white;
-    background-color:  rgba(192, 192, 192, 0.8) ;
+    background-color:   #e45b10 ;
     padding: 20px 10px 20px 10px;
+
+    -webkit-border-radius: 0px 20px 0px 0px;
+    border-radius: 0px 20px 0px 0px;
+
+    -webkit-box-shadow: 1px 1px 4px 1px rgba(0,0,0,0.52); 
+    box-shadow: 1px 1px 4px 1px rgba(0,0,0,0.52);
+
+    margin-bottom: 40px;
+
+    
     
 }
 
@@ -262,6 +281,13 @@ button:hover {
     color: rgba(192, 192, 192, 0.8);
     padding: 0px 10px 1px 10px;
     width: fit-content;
+    
+    -webkit-border-radius: 0px 20px 0px 0px;
+    border-radius: 0px 20px 0px 0px;
+
+    
+
+    margin-top: 20px;
 }
 
 /* textarea */
@@ -294,6 +320,24 @@ textarea#textarea_styled {
 #input_button_update {
     border: none;
     background-color: rgba(75, 75, 75, 0.8);  
+    color: white; 
+    padding: 15px; 
+    border-radius: 15px;
+
+}
+
+#input_button_publish {
+    border: none;
+    background-color: rgba(255, 193, 22, 0.8);  
+    color: white; 
+    padding: 15px; 
+    border-radius: 15px;
+
+}
+
+#input_button_unpublish {
+    border: none;
+    background-color: rgba(34, 190, 60, 0.8);  
     color: white; 
     padding: 15px; 
     border-radius: 15px;
@@ -415,3 +459,56 @@ textarea {
 }
 
 */
+
+/* baner bootom nav on loged in user page - further info about wisiting admimin backend part of web */
+.backand_loged_user_info {
+    background-color: rgb(75, 75, 75);
+    color: white;
+   
+    
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    height: 60px;
+
+}
+
+.backand_loged_user_info-text{
+    padding: 15px 5px 20px 20px;
+}
+
+
+/* site background ofr coomon user and loged in user */
+
+.loged_in_background {
+    background-color: darkgray;
+
+}
+				
+
+.common_unloged_background { /* for further reference please visit https://www.w3schools.com/cssref/pr_background-image.asp , 5.6.2021 */
+    background-image: url("/images/background1.jpg"); /* The image used */
+    background-color: #ffaa02; /* Used if the image is unavailable */
+    /*height: 500px; You must set a specified height */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+
+}
+
+section {
+    background-color: white;
+}
+
+.loged_in_text_highlight {
+    color: rgb(253, 154, 42);
+}
+
+.whole_article_unpublished {
+    background-color: rgb(255, 239, 20);
+    padding: 10px 10px 10px 50px;
+
+    background-image: url("/images/warning_stripe.png"); /* The image used */
+    background-position: left; /* Center the image */
+    background-repeat: repeat-y; /* Do not repeat the image */
+    background-size: 30px; /* Resize the background image to cover the entire container */
+}

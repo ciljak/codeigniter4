@@ -159,8 +159,9 @@ class News extends Controller
                 // delete appropriate file
                 /*  echo '<?=base_url()?>/public/images/'.$data['news']['picture_name']; - for debug of delete link creation*/ 
                 /* delete_files('<?=base_url()?>/public/images/'.$data['news']['picture_name'], true); */
+            if ($data['news']['picture_name'] != null) {
                 unlink('./images/'.$data['news']['picture_name']);
-           
+            }
             
             $model->where('id', $id)->delete();
 
@@ -249,7 +250,8 @@ class News extends Controller
     
                 //$builder->selectMax('id');
                 $builder->where('id', $id)->set('is_published', '1');
-                $builder->insert();
+               // insert create new article, but we will update existing $builder->insert();
+                $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data
 
         // send data after publishing to view
         $model = new NewsModel();
@@ -290,7 +292,8 @@ class News extends Controller
 
         //$builder->selectMax('id');
         $builder->where('id', $id)->set('is_published', '0');
-        $builder->insert();
+       // $builder->insert();
+        $builder-> update();
 
         // send data after publishing to view
         $model = new NewsModel();

@@ -171,7 +171,9 @@ class Contactus extends Controller
                   
                      // part responsible for reading all contact posts and passing them into a view
                 $data = [
-                    'contactus'  => $model->getContactusPosts(),
+                    //'contactus'  => $model->getContactusPosts(),
+                    'contactus' => $model->orderBy('id', 'DESC')->paginate(5), // after use pagination, ordering must be implemented here - method in model is not used
+                    'pager' => $model->pager,
                     
                 ];
     

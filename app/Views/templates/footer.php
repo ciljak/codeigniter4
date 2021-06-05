@@ -29,6 +29,6 @@
 </script>
 -->
 <!-- -->
-
+      </div> <!-- end of main page background -->
 </body>
 </html>

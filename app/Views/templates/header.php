@@ -105,3 +105,41 @@
 </header>
 
 <body>
+<!-- Main page background --> <!-- beggining of main page background -->
+	<?php if ((session()->get('isLoggedIn')) ): 
+				//loged in user - display backand background ?>
+	    <div class="loged_in_background">
+				
+
+	<?php else :
+				//not logged in user - common page visitor ?>
+
+	
+	    <div class="common_unloged_background">
+
+	<?php endif; ?>			
+
+	
+
+
+<!-- Part displayed for loged in users - further information about administration on background. -->
+		<?php if (session()->get('isLoggedIn')): 
+					//loged in admin ?>
+		<div class="backand_loged_user_info">
+			<div class="backand_loged_user_info-text">
+		    	
+			<h2><img src="/images/admin_logo.png"	height="30px"> You are now loged in as <span class="loged_in_text_highlight"> <?php echo  session()->get('role')  ?> </span>- page administration backend for
+			    <span class="loged_in_text_highlight"> <?php echo base_url('') ; ?></span>.</h2>
+			</div>
+		</div>			
+
+		<?php elseif  ((session()->get('isLoggedIn')) && (session()->get('role') !="admin")):
+					//other loged in user as admin ?>
+
+		<div class="backand_loged_user_info">
+			<div class="backand_loged_user_info-text">
+			<h2>You are now loged in as <?php echo session()->get('role') ?> - page administration backend for <?php echo base_url('') ; ?>.</h2>
+			</div>
+		</div>		
+
+		<?php endif; ?>	

@@ -33,6 +33,7 @@ class NewsModel extends Model
 
             //$builder->selectMax('id');
             $builder->orderBy('id', 'DESC'); // order from latest to older
+            $builder->where('is_published', '1'); // select only published news
             $builder->limit(2); // return latest two articles
            
 
@@ -78,13 +79,8 @@ class NewsModel extends Model
                     ->first();       // helper methods used by Query builder
     }
 
-    public function publish_news_article($id) // publish article - is_published chante to 1
-     {
-        
+   
 
-        return $this->asArray()
-                    ->where(['id' => $id])
-                    ->first();       // helper methods used by Query builder
-    }
+    
 
 }

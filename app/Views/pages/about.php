@@ -79,43 +79,46 @@
 				?>
 				</div>
 
-
+				
 				<!-- Display last 3 article - reworked along news part -->
 				<h1 class="main_h1">Latest news</h1>
 
 					<?php if (! empty($news) && is_array($news)) : ?>
 
 						<?php foreach ($news as $news_item): ?>
-						<div class="article_header_about">
-							<h3><?= esc($news_item['title']) ?></h3>
-						</div>
-						<div class="article_body_about">
-							<table>
-								<tr>
-								<?php if (!empty($news_item['picture_name'])): ?>  <!-- if picture is provided it mean we will display in two table column -->
-										<td>
-											<div id="article_image" class="article_image">
-												<img src="<?=base_url()?>/images/<?= esc($news_item['picture_name']) ?>" alt="Article image - <?= esc($news_item['title']) ?> " width="250px" >
-											</div>
-										</td>
-									<?php endif ?>  
-									<td id="left_news_article_about"> 
-										<div id="body_text" class="main">
-											<?= esc($news_item['body']) ?>
-										</div>
-									</td>
-								</tr>
-							</table>
-							<!-- old version <p><a href="/news/<?= esc($news_item['slug'], 'url') ?>">View article</a></p>  without base url -->
-							<div id="article_hyperlink" class="article_hyperlink">
-								<p><a class="news_article_hyperlink" href="<?php echo base_url('news') ; ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?>">View article 
-								<br /> &nbsp; &nbsp; &nbsp;
-								<?php echo base_url('news'); ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?> </a></p>
-							</div>
-						</div>   
-							
-							
-							<hr> <br />
+
+							<?php if (($news_item['is_published']==1) ) : // display only published article        ?> 
+								<div class="article_header_about">
+									<h3 ><?= esc($news_item['title']) ?></h3>
+								</div>
+								<div class="article_body_about">
+									<table>
+										<tr>
+										<?php if (!empty($news_item['picture_name'])): ?>  <!-- if picture is provided it mean we will display in two table column -->
+												<td>
+													<div id="article_image" class="article_image">
+														<img src="<?=base_url()?>/images/<?= esc($news_item['picture_name']) ?>" alt="Article image - <?= esc($news_item['title']) ?> " width="250px" >
+													</div>
+												</td>
+											<?php endif ?>  
+											<td id="left_news_article_about"> 
+												<div id="body_text" class="main">
+													<?= esc($news_item['body']) ?>
+												</div>
+											</td>
+										</tr>
+									</table>
+									<!-- old version <p><a href="/news/<?= esc($news_item['slug'], 'url') ?>">View article</a></p>  without base url -->
+									<div id="article_hyperlink" class="article_hyperlink">
+										<p><a class="news_article_hyperlink" href="<?php echo base_url('news') ; ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?>"> <b> View article </b>
+										<br /> &nbsp; &nbsp; &nbsp;
+										<?php echo base_url('news'); ?><?php echo "/" ; ?><?= esc($news_item['slug'], 'url') ?> </a></p>
+									</div>
+								</div>   
+									
+									
+									<br />
+							<?php endif ?>	
 						<?php endforeach; ?>
 					<?php endif ?>	
 
@@ -150,7 +153,7 @@
 					<ul class="nav flex-column">
 					<li class="menu-item hidden"><a href="<?php echo base_url('project_milestones') ; ?>">Project milestones</a></li>
 				    </ul>
-				</div>
+			</div>
 	     
 	  </div>
     </div>

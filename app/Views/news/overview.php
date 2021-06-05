@@ -1,9 +1,22 @@
 <!-- OVERVIEW is responsible for display of all news articles with buttons for desired operations -->
 <section>
     
+    <?php if ((session()->get('isLoggedIn')) ): 
+				//loged in user - can publish news article but still markt as unpublished and only site admin can make it visible by changing value is_published to true = 1 ?>
+	   <a href="news/create"><button type="button">Add new news post</button></a>
+       <br /> <br /> <br />
+				
 
-    <a href="news/create"><button type="button">Add new news post</button></a>
-    <br /> <br /> <br />
+	<?php else :
+				//not logged in user - common page visitor ?>
+
+	
+         <a href="users"><button type="button">Log in for ability to publish news</button></a>
+       <br /> <br /> <br />
+
+	<?php endif; ?>			
+
+    
 
     <h1 class="main_h1"><?= esc($title) ?></h1>
 
@@ -13,7 +26,8 @@
             <?php if (($news_item['is_published']==1) || (session()->get('role') == 'admin')) : // this is only a security chec, if this select visible article then pagination 
             // will result in different number of displayed pages, must by implemented in query - but site admin can see all post and news controller suply them with unfiltered data
                 ?> 
-
+            <div class="whole_article <?php if ($news_item['is_published']==0) echo "whole_article_unpublished";  ?>" > <!-- if unpublished add marking whole_article_unpublished -->
+            <?php if ($news_item['is_published']==0) echo "<p><b>Unpublished article</b> - please visit them and publish.<p>";  ?>   
                 <div class="article_header">
                     <h3><?= esc($news_item['title']) ?></h3>
                 </div>
@@ -55,9 +69,9 @@
                         <?php if ((session()->get('isLoggedIn')) && session()->get('role')=="admin"): 
                         //if is loged admin - he can publis article to be visible ?>
                              <?php if ($news_item['is_published']==0): ?>
-                                <a  href="<?php echo base_url('news/publish_news_article/'.$news_item['id']);?> "><button id="input_button_update"> Publish</button></a> 
+                                <a  href="<?php echo base_url('news/publish_news_article/'.$news_item['id']);?> "><button id="input_button_publish"> Publish</button></a> 
                              <?php else :   ?>
-                                <a  href="<?php echo base_url('news/unpublish_news_article/'.$news_item['id']);?> "><button id="input_button_update"> Unpublish</button></a> 
+                                <a  href="<?php echo base_url('news/unpublish_news_article/'.$news_item['id']);?> "><button id="input_button_unpublish"> Unpublish</button></a> 
                             <?php endif ?>
 
                          <?php endif ?>
@@ -71,8 +85,9 @@
                     <?php else : 
                         // coomon unloged user?>
                     <p>Only loged in owner users or administrators can edit articles -  <a  href="<?php echo base_url('users/');?> "> login</a> </p>
-                    
+            
                     <?php endif ?>
+            </div >        
                     <hr> <br />
             <?php endif ?>
         <?php endforeach; ?>
