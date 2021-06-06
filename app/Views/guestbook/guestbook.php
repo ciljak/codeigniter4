@@ -27,6 +27,8 @@
         <label for="formGroupExampleInput">Article picture: </label>
         <input type="file" name="guestbook_image_file" class="form-control" id="guestbook_image_file" onchange="readURL(this);" accept=".png, .jpg, .jpeg" /> <br />
 
+      
+
         <input id="input_button_create" type="submit" name="submit" value="Write new post" />
       </fieldset>
     </form>

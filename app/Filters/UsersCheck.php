@@ -40,10 +40,10 @@ class UsersCheck implements FilterInterface
           //return redirect()->to('register');
         }
         if(($uri->getSegment(1) == 'users') && ($uri->getSegment(2) == 'logout') ) {
-         // return redirect()->to('users/logout');
+          //return redirect()->to('logout');
         }
         if(($uri->getSegment(1) == 'users') && ($uri->getSegment(2) == 'profile') ) {
-         // return redirect()->to('users/profile');
+          //return redirect()->to('users/profile');
         }
 
     }

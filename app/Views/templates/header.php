@@ -23,6 +23,7 @@
 	 
 	 <script src="<?php echo base_url('js/bootstrap-dropdown.js'); ?>"></script>
 	 <script src="<?php echo base_url('js/simple-lightbox.min.js'); ?>"></script>
+	 <script src='https://www.google.com/recaptcha/api.js'></script>
 	
 </head>    
 
@@ -41,6 +42,7 @@
 			
 				<li class="nav-link"><a href="<?php echo base_url('about') ; ?>">About</a></li>
 				<li class="nav-link"><a href="<?php echo base_url('news') ; ?>">News</a></li>
+				<li class="nav-link"><a href="<?php echo base_url('eshop') ; ?>">E-shop</a></li>
 				<li class="nav-link"><a href="<?php echo base_url('guestbook') ; ?>">Guestbook</a></li>
 				<li class="nav-link"><a href="https://codeigniter4.github.io/userguide/" target="_blank">Docs</a></li>
 				<li class="nav-link"><a href="https://forum.codeigniter.com/" target="_blank">Community</a></li>
@@ -68,6 +70,7 @@
 			<!-- base_url inserts part defined in .env config file consists of main url part that can be easy chenged along hosting migration -->
 			<li class="menu-item hidden"><a href="<?php echo base_url('about') ; ?>">About</a></li>
 			<li class="menu-item hidden"><a href="<?php echo base_url('news') ; ?>">News</a></li>
+			<li class="menu-item hidden"><a href="<?php echo base_url('eshop') ; ?>">E-shop</a></li>
             <li class="menu-item hidden"><a href="<?php echo base_url('guestbook') ; ?>">Guestbook</a></li>
 			<li class="menu-item hidden"><a href="https://codeigniter4.github.io/userguide/" target="_blank">Docs</a>
 			</li>

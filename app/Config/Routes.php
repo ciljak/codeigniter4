@@ -53,6 +53,14 @@ $routes->match(['get', 'post'], 'news/update_news_article/(:segment)', 'News::up
 $routes->match(['get', 'post'], 'news/publish_news_article/(:segment)', 'News::publish_news_article/$1',['filter' => 'auth']); // for routing to controller responsible for news article publishing
 $routes->match(['get', 'post'], 'news/unpublish_news_article/(:segment)', 'News::unpublish_news_article/$1',['filter' => 'auth']); // for routing to controller responsible for news article unpublishing
 
+//eshop routing 6.6.2021
+$routes->match(['get', 'post'], 'eshop/create', 'Eshop::create',['filter' => 'auth']); // for routing to page creating new articles in news - auth filter redirects all atempts for access to main index page for aunauthorized users
+$routes->match(['get', 'post'], 'eshop/delete_eshop_product/(:segment)', 'Eshop::delete_eshop_product/$1',['filter' => 'auth']); // for routing to controller responsible for deletion
+$routes->match(['get', 'post'], 'eshop/update_eshop_product/(:segment)', 'Eshop::update_eshop_product/$1',['filter' => 'auth']); // for routing to controller responsible for news article update
+$routes->match(['get', 'post'], 'eshop/publish_eshop_product/(:segment)', 'Eshop::publish_eshop_product/$1',['filter' => 'auth']); // for routing to controller responsible for news article publishing
+$routes->match(['get', 'post'], 'eshop/unpublish_eshop_product/(:segment)', 'Eshop::unpublish_eshop_product/$1',['filter' => 'auth']); // for routing to controller responsible for news article unpublishing
+
+
 
 //gustbook routing
 $routes->match(['get', 'post'], 'guestbook/guestbook_add_post', 'Guestbook::guestbook_add_post'); // for routing to controller responsible for news article update
@@ -82,6 +90,7 @@ $routes->get('guestbook/guestbook_single_view/(:segment)', 'Guestbook::guestbook
 
 
 $routes->get('news', 'News::index');
+$routes->get('eshop', 'Eshop::index');
 $routes->get('guestbook', 'Guestbook::index');
 $routes->get('contactus', 'Contactus::index');
 
