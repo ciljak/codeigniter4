@@ -80,6 +80,24 @@ class EshopModel extends Model
                     ->first();       // helper methods used by Query builder
     }
 
+
+    public function list_category_subcategory()
+    {
+        // create connection to a database - for further reading please visit - https://codeigniter.com/user_guide/database/query_builder.html, 23.5.2021
+            $db      = \Config\Database::connect();
+            $builder = $db->table('eshop');
+
+            //$builder->selectMax('id');
+            $builder->orderBy('product_category', 'ASC'); // order from latest to older
+            $builder->select('id, product_category, product_subcategory') ;
+            $builder->distinct();  
+            
+            // $builder->limit(2);  return latest two articles
+           
+
+           return $builder->get()->getResultArray();
+   }
+
    
 
     

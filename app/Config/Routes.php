@@ -60,6 +60,7 @@ $routes->match(['get', 'post'], 'eshop/update_eshop_product/(:segment)', 'Eshop:
 $routes->match(['get', 'post'], 'eshop/publish_eshop_product/(:segment)', 'Eshop::publish_eshop_product/$1',['filter' => 'auth']); // for routing to controller responsible for news article publishing
 $routes->match(['get', 'post'], 'eshop/unpublish_eshop_product/(:segment)', 'Eshop::unpublish_eshop_product/$1',['filter' => 'auth']); // for routing to controller responsible for news article unpublishing
 
+$routes->get('eshop/(:segment)', 'Eshop::view/$1');  // for routing appropriate product items along slug
 
 
 //gustbook routing

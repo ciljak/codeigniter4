@@ -15,10 +15,63 @@
         <input type="input" name="product_name" /><br />
 
         <label for="product_category">Product category</label>
-        <input type="input" name="product_category" /><br />
+        
+        <input id="category_data" list="product_category" name="product_category" onchange="modify_value_of_selected()" >
+                <datalist id="product_category">
+
+                 <?php foreach ($eshop as $eshop_item): ?>
+                     <?php 
+                        if (empty($previews_category)) { // if it is first run assign emty string
+                          $previews_category = "";
+                        }; 
+                        
+                        if($eshop_item['product_category'] != $previews_category ) { // display only distinct categories
+                            echo "<option value=" . $eshop_item['product_category'] . ">";
+                        };
+                     
+                        $previews_category = $eshop_item['product_category']; // remember current value
+                     ?>
+
+                  <?php endforeach; ?> 
+        </datalist> <span id="selected_category"></span> <br>
+
+        <!-- read value entered into product category -->
+        <script>
+          
+
+           function modify_value_of_selected() { // function for calculating results
+              var selected_category = document.getElementById("category_data").value;
+              console.log('User selected -' + selected_category);
+        
+              var element_modified=  document.getElementById('selected_category');
+              element_modified.textContent =selected_category ;
+
+            
+        
+              
+         }
+        </script>
+
 
         <label for="product_subcategory">Product subcategory</label>
-        <input type="input" name="product_subcategory" /><br />
+        <input list="product_subcategory" name="product_subcategory" >
+                <datalist id="product_subcategory">
+
+                 <?php foreach ($eshop as $eshop_item): ?>
+                  <?php 
+                        if (empty($previews_subcategory)) { // if it is first run assign emty string
+                          $previews_subcategory = "";
+                        }; 
+                        
+                        if($eshop_item['product_subcategory'] != $previews_subcategory ) { // display only distinct categories
+                            echo "<option value=" . $eshop_item['product_subcategory'] . ">";
+                        };
+                     
+                        $previews_subcategory = $eshop_item['product_subcategory']; // remember current value
+                     ?>
+
+                  <?php endforeach; ?> 
+        </datalist> <br>
 
         <label for="product_price">Product price without DPH</label>
         <input type="input" name="product_price" /><br />

@@ -24,7 +24,7 @@ class Eshop extends Controller
         if(session()->get('role') == 'admin') { // if admin loged in thend dont filter published but display all to ability manage them
             $data = [
                 //'eshop'  => $model->geteshop(),
-                'title' => 'eshop archive',
+                'title' => 'Our latest e-shop products are here ...',
                 'eshop' => $model->orderBy('id', 'DESC')->paginate(3),
                 'pager' => $model->pager,
             ];
@@ -33,7 +33,7 @@ class Eshop extends Controller
 
            $data = [
             //'eshop'  => $model->geteshop(),
-            'title' => 'eshop archive',
+            'title' => 'Our latest e-shop products are here ...',
             'eshop' => $model->where('is_published', '1')->orderBy('id', 'DESC')->paginate(3),
             'pager' => $model->pager,
         ];
@@ -62,14 +62,14 @@ class Eshop extends Controller
     {
         $model = new EshopModel();
     
-        $data['eshop'] = $model->getProduct($slug);
+        $data['eshop'] = $model->getProducts($slug);
     
         if (empty($data['eshop']))
         {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Cannot find the eshop item: '. $slug);
         }
     
-        $data['title'] = $data['eshop']['title'];
+       // $data['title'] = $data['eshop']['title'];
     
         echo view('templates/header', $data);
         echo view('eshop/view', $data);
@@ -79,6 +79,15 @@ class Eshop extends Controller
     public function create() // for further reading please visit https://codeigniter.com/user_guide/tutorial/create_eshop_items.html, 24.4.2021
     {
         $model = new eshopModel();
+        // if first run provide category/ subcategory data for create view
+        $data ['eshop'] = $model->list_category_subcategory();
+
+        echo view('templates/header', ['title' => 'Create a eshop item']);
+        echo view('eshop/create', $data );
+        echo view('templates/footer');
+
+
+        // if data submitted
 
         if ($this->request->getMethod() === 'post' && $this->validate([
                 'product_name' => 'required|min_length[3]|max_length[255]',
@@ -190,6 +199,7 @@ class Eshop extends Controller
             //$data['eshop'] = $model->getLatest(); this approach does not work because i cann note order_by and take first() element but all data ara available 
             // and can by simply passed by on from send post
             $data ['eshop'] = [
+                        'id' => $this->request->getPost('id'),
                         'product_name' => $this->request->getPost('product_name'),
                         'product_id' => $this->request->getPost('product_id'),
                         'product_category' => $this->request->getPost('product_catgory'),
@@ -235,8 +245,14 @@ class Eshop extends Controller
                 // delete appropriate file
                 /*  echo '<?=base_url()?>/public/images/'.$data['eshop']['picture_name']; - for debug of delete link creation*/ 
                 /* delete_files('<?=base_url()?>/public/images/'.$data['eshop']['picture_name'], true); */
-            if ($data['eshop']['picture_name'] != null) {
-                unlink('./images/'.$data['eshop']['picture_name']);
+            if ($data['eshop']['picture_name_1'] != "no_image.png") {
+                unlink('./eshop_images/'.$data['eshop']['picture_name_1']);
+            }
+            if ($data['eshop']['picture_name_2'] != "no_image.png") {
+                unlink('./eshop_images/'.$data['eshop']['picture_name_2']);
+            }
+            if ($data['eshop']['picture_name_3'] != "no_image.png") {
+                unlink('./eshop_images/'.$data['eshop']['picture_name_3']);
             }
             
             $model->where('id', $id)->delete();
@@ -270,7 +286,7 @@ class Eshop extends Controller
                     'nr_of_items_on_store'  => 'required',
                     
                     'eshop_image_file1' => [
-                        'uploaded[eshop_image_file1]',
+                       // 'uploaded[eshop_image_file1]',
                         'mime_in[eshop_image_file1,image/jpg,image/jpeg,image/gif,image/png]',
                         'max_size[eshop_image_file1,12096]',
                     ],
@@ -293,9 +309,11 @@ class Eshop extends Controller
                     $eshop_image_type1 = $eshop_image1->getMimeType();
                     $eshop_image1 = $eshop_image1->move('./eshop_images', $newName1); //picture is moved into a images folder nested in public folder
                 } else {
-                // image is absent - reference to no image example    
-                    $newName1 = "no_image.png"; // generate new random name
-                    $eshop_image_type1 = "image/png";
+                // image is absent  -> nothing change  - reread older values
+                    
+                    $data['eshop'] = $model->getID($id);
+                    $newName1 = $data['eshop']['picture_name_1'] ;
+                    $eshop_image_type1 = $data['eshop']['picture_type_1'] ;
                 }
     
                 $eshop_image2 = $this->request->getFile('eshop_image_file2'); // creating object of uploaded 
@@ -305,9 +323,11 @@ class Eshop extends Controller
                     $eshop_image_type2 = $eshop_image2->getMimeType();
                     $eshop_image2 = $eshop_image2->move('./eshop_images', $newName2); //picture is moved into a images folder nested in public folder
                 } else {
-                // image is absent - reference to no image example    
-                    $newName2 = "no_image.png"; // generate new random name
-                    $eshop_image_type2 = "image/png";
+                // image is absent  -> nothing change  - reread older values
+                    
+                    $data['eshop'] = $model->getID($id);
+                    $newName2 = $data['eshop']['picture_name_2'] ;
+                    $eshop_image_type2 = $data['eshop']['picture_type_2'] ;
                 }
     
                 $eshop_image3 = $this->request->getFile('eshop_image_file3'); // creating object of uploaded 
@@ -317,19 +337,14 @@ class Eshop extends Controller
                     $eshop_image_type3 = $eshop_image3->getMimeType();
                     $eshop_image3 = $eshop_image3->move('./eshop_images', $newName3); //picture is moved into a images folder nested in public folder
                 } else {
-                // image is absent - reference to no image example    
-                    $newName3 = "no_image.png"; // generate new random name
-                    $eshop_image_type3 = "image/png";
+                // image is absent  -> nothing change  - reread older values
+                    
+                    $data['eshop'] = $model->getID($id);
+                    $newName3 = $data['eshop']['picture_name_3'] ;
+                    $eshop_image_type3 = $data['eshop']['picture_type_3'] ;
                 }
                 
-                $model->save([
-                    'id' => $id,
-                    'title' => $this->request->getPost('title'),
-                    'slug'  => url_title($this->request->getPost('title'), '-', TRUE),
-                    'body'  => $this->request->getPost('body'),
-                    'picture_name' =>  $newName , //$newName, //  or if orignal upload name is $eshop_image->usedgetClientName(),
-                    'picture_type'  => $eshop_image_type
-                ]);
+              
                 
                 //$data['eshop'] = $model->getLatest(); this approach does not work because i cann note order_by and take first() element but all data ara available 
                 // and can by simply passed by on from send post
@@ -355,7 +370,8 @@ class Eshop extends Controller
                 } else { // loged in user - session contains their user_id or id
                     $model->save([
                         'product_name' => $this->request->getPost('product_name'),
-                        'product_id' => $this->request->getPost('product_id'),
+                        'id' => $id,
+                        'peoduct_id' => $this->request->getPost('product_id'),
                         'product_category' => $this->request->getPost('product_category'),
                         'product_subcategory' => $this->request->getPost('product_subcategory'),
                         'product_price' => $this->request->getPost('product_price'),
@@ -382,6 +398,9 @@ class Eshop extends Controller
             {
                  // first obtain data that will be deleted for passing into view informing about data deletion
                 $data['eshop'] = $model->getID($id);
+
+                // if first run provide category/ subcategory data for create view
+                $data ['eshop_category_list'] = $model->list_category_subcategory();
                
                 echo view('templates/header', ['title' => 'Update a eshop item']);
                 echo view('eshop/eshop_article_updated', $data );
