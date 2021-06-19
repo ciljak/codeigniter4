@@ -5,14 +5,13 @@ namespace App\Models;
 use CodeIgniter\Model;
 helper('array');
 
-class EshopModel extends Model
+class OrderModel extends Model
 {
-    protected $table = 'eshop';
+    protected $table = 'order';
 
-    protected $allowedFields = ['id','product_name', 'product_category', 'product_subcategory','product_price', 'user_id', 'dph', 'is_published', 'nr_of_items_on_store',
-    'slug', 'description', 'picture_name_1', 'picture_type_1', 'picture_name_2', 'picture_type_2', 'picture_name_3', 'picture_type_3', 'user_cart'];
+    protected $allowedFields = ['order_id','user_id', 'product_id', 'number_of_ordered_items','total_price', 'state_of_order', 'main_order_number'];
 
-    public function getProducts($slug = false)
+    public function getOrders($slug = false)
     {
         if ($slug === false)
         {
@@ -24,13 +23,13 @@ class EshopModel extends Model
                     ->first();       // helper methods used by Query builder
     }
 
-    public function getLatestProducts($slug = false)
+    public function getLatestOrder($slug = false)
     {
         if ($slug === false)
         {
             // create connection to a database - for further reading please visit - https://codeigniter.com/user_guide/database/query_builder.html, 23.5.2021
             $db      = \Config\Database::connect();
-            $builder = $db->table('eshop');
+            $builder = $db->table('order');
 
             //$builder->selectMax('id');
             $builder->orderBy('id', 'DESC'); // order from latest to older
@@ -81,22 +80,7 @@ class EshopModel extends Model
     }
 
 
-    public function list_category_subcategory()
-    {
-        // create connection to a database - for further reading please visit - https://codeigniter.com/user_guide/database/query_builder.html, 23.5.2021
-            $db      = \Config\Database::connect();
-            $builder = $db->table('eshop');
-
-            //$builder->selectMax('id');
-            $builder->orderBy('product_category', 'ASC'); // order from latest to older
-            $builder->select('id, product_category, product_subcategory') ;
-            $builder->distinct();  
-            
-            // $builder->limit(2);  return latest two articles
-           
-
-           return $builder->get()->getResultArray();
-   }
+   
 
    
 

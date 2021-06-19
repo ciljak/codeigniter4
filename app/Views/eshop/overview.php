@@ -79,9 +79,20 @@
                     <div id="article_hyperlink" class="article_hyperlink">
                         <p><a class="news_article_hyperlink" href="<?php echo base_url('eshop') ; ?><?php echo "/" ; ?><?= esc($eshop_item['slug'], 'url') ?>">View article 
                         <br /> &nbsp; &nbsp; &nbsp;
-                        <?php echo base_url('eshop'); ?><?php echo "/" ; ?><?= esc($eshop_item['slug'], 'url') ?> </a></p>
+                        <?php echo base_url('eshop'); ?><?php echo "/" ; ?><?= esc($eshop_item['slug'], 'url') ?> </a>
+                        </p>
                     </div>
-                </div>   
+
+                    <!-- add/ remove item to cart -->
+                    <div class="add_to_cart_button">
+                            <?php if ($eshop_item['user_cart']==0): ?>
+                                        <a  href="<?php echo base_url('eshop/add_to_cart/'.$eshop_item['id']);?> "><button id="cart_button_add"> <img src="/eshop_images/cart_icon_colored.png" alt="choping_cart" height="45px"> Add to cart </button></a> 
+                            <?php else :   ?>
+                                        <a  href="<?php echo base_url('eshop/remove_from_cart/'.$eshop_item['id']);?> "><button id="cart_button_remove">  <img src="/eshop_images/cart_icon_colored.png" alt="choping_cart" height="45px"> Remove from cart </button></a> 
+                            <?php endif ?>
+                    </div>
+                    
+                    </div>   
                 <?php  // debug - for testing purpouses
                             //echo "article users id: ". $news_item['user_id'];
                             //echo "session users id: ". session()->get('id');

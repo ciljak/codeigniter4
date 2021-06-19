@@ -59,6 +59,12 @@ $routes->match(['get', 'post'], 'eshop/delete_eshop_product/(:segment)', 'Eshop:
 $routes->match(['get', 'post'], 'eshop/update_eshop_product/(:segment)', 'Eshop::update_eshop_product/$1',['filter' => 'auth']); // for routing to controller responsible for news article update
 $routes->match(['get', 'post'], 'eshop/publish_eshop_product/(:segment)', 'Eshop::publish_eshop_product/$1',['filter' => 'auth']); // for routing to controller responsible for news article publishing
 $routes->match(['get', 'post'], 'eshop/unpublish_eshop_product/(:segment)', 'Eshop::unpublish_eshop_product/$1',['filter' => 'auth']); // for routing to controller responsible for news article unpublishing
+$routes->match(['get', 'post'], 'eshop/add_to_cart/(:segment)', 'Eshop::add_to_cart/$1'); // for routing to controller responsible for news article publishing
+$routes->match(['get', 'post'], 'eshop/remove_from_cart/(:segment)', 'Eshop::remove_from_cart/$1'); // for routing to controller responsible for news article unpublishing
+
+$routes->match(['get', 'post'], 'eshop/remove_from_cart_return_to_cart/(:segment)', 'Eshop::remove_from_cart_return_to_cart/$1'); // for routing to controller responsible for news article unpublishing
+
+$routes->match(['get', 'post'], 'eshop/cart', 'Eshop::cart'); // for routing to controller responsible for news article unpublishing
 
 $routes->get('eshop/(:segment)', 'Eshop::view/$1');  // for routing appropriate product items along slug
 

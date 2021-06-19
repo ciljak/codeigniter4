@@ -54,6 +54,7 @@
 			  <li class="nav-link"><a href="<?php echo base_url('users/profile') ; ?>">Update profile</a></li>
 			  <li class="nav-link active"><a href="<?php echo base_url('users/dashboard') ; ?>">Hello, <?= session()->get('firstname') ?></a></li>
 			  <li><hr class="dropdown-divider"></li>
+			  <li><?php require_once('cart_icon.php'); ?></li>
 			  <li class="nav-link"><a href="<?php echo base_url('users/logout') ; ?>">Logout</a></li>
 	        
 	</ul >
@@ -77,6 +78,7 @@
 			<li class="menu-item hidden"><a href="https://forum.codeigniter.com/" target="_blank">Community</a></li>
 			<li class="menu-item hidden"><a href="<?php echo base_url('contactus') ; ?>">Contact us</a></li>
 			<li class="menu-item hidden"><a href="<?php echo base_url('users') ; ?>">Personal part - login</a></li>
+			<li><?php require_once('cart_icon.php'); ?></li>
 
 
 

@@ -54,6 +54,32 @@ class Eshop extends Controller
         echo view('templates/footer', $data);
     }
 
+    public function cart()
+    {
+        $model = new EshopModel();
+    
+       
+
+           // send data to view for recreating list of user added items to cart
+
+           $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'Your cart contains these items ...',
+            'eshop' => $model->where('user_cart', session()->get('id'))->orderBy('id', 'DESC')->paginate(10), // read data marked with user_id in user_cart field in database
+            'pager' => $model->pager,
+        ];
+            
+        
+
+       
+
+        
+    
+        echo view('templates/header', $data);
+        echo view('eshop/cart', $data);
+        echo view('templates/footer', $data);
+    }
+
     /* Next, there are two methods, one to view all eshop items, 
     and one for a specific eshop item. You can see that the $slug variable is passed to the model’s method in the second method. 
     The model is using this slug to identify the eshop item to be returned. */
@@ -495,4 +521,123 @@ class Eshop extends Controller
         echo view('eshop/overview', $data ); // return into main eshop page 
         echo view('templates/footer');
     }        
+
+
+
+ 
+
+    public function add_to_cart($id) // add product to cart - set user_cart field to current user id
+    {
+        
+       
+       // rework this part - how to update only one field in row
+                $db      = \Config\Database::connect();
+                $builder = $db->table('eshop');
+    
+                //$builder->selectMax('id');
+                $builder->where('id', $id)->set('user_cart', session()->get('id'));
+               // insert create new article, but we will update existing $builder->insert();
+                $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data
+
+        // send data after publishing to view
+        $model = new eshopModel();
+    
+        if(session()->get('role') == 'admin') { // if admin loged in thend dont filter published but display all to ability manage them
+            $data = [
+                //'eshop'  => $model->geteshop(),
+                'title' => 'eshop archive',
+                'eshop' => $model->orderBy('id', 'DESC')->paginate(3),
+                'pager' => $model->pager,
+            ];
+    
+        } else { // coomon user see only published articles
+
+           $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'eshop archive',
+            'eshop' => $model->where('is_published', '1')->orderBy('id', 'DESC')->paginate(3),
+            'pager' => $model->pager,
+           ];
+        
+        };
+
+       
+
+        echo view('templates/header');
+        echo view('eshop/overview', $data ); // return into main eshop page 
+        echo view('templates/footer');
+    }   
+    
+    public function remove_from_cart($id) // remove product from cart - set user_cart back to default value 0
+    {
+        
+        //find record with appropriate id and change value of item
+        // $model->where('id', $id)->set('is_published', '0');
+        $db      = \Config\Database::connect();
+        $builder = $db->table('eshop');
+
+        //$builder->selectMax('id');
+        $builder->where('id', $id)->set('user_cart', '0');
+       // $builder->insert();
+        $builder-> update();
+
+        // send data after publishing to view
+        $model = new eshopModel();
+    
+        if(session()->get('role') == 'admin') { // if admin loged in thend dont filter published but display all to ability manage them
+            $data = [
+                //'eshop'  => $model->geteshop(),
+                'title' => 'eshop archive',
+                'eshop' => $model->orderBy('id', 'DESC')->paginate(3),
+                'pager' => $model->pager,
+            ];
+    
+        } else { // coomon user see only published articles
+
+           $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'eshop archive',
+            'eshop' => $model->where('is_published', '1')->orderBy('id', 'DESC')->paginate(3),
+            'pager' => $model->pager,
+           ];
+        
+        };
+
+
+        echo view('templates/header');
+        echo view('eshop/overview', $data ); // return into main eshop page 
+        echo view('templates/footer');
+    }  
+    
+    
+    
+
+    public function remove_from_cart_return_to_cart($id) // remove product from cart - set user_cart back to default value 0
+    {
+        
+        //find record with appropriate id and change value of item
+        // $model->where('id', $id)->set('is_published', '0');
+        $db      = \Config\Database::connect();
+        $builder = $db->table('eshop');
+
+        //$builder->selectMax('id');
+        $builder->where('id', $id)->set('user_cart', '0');
+       // $builder->insert();
+        $builder-> update();
+
+        // send data after publishing to view
+        $model = new eshopModel();
+    
+        $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'Your cart contains these items ...',
+            'eshop' => $model->where('user_cart', session()->get('id'))->orderBy('id', 'DESC')->paginate(10), // read data marked with user_id in user_cart field in database
+            'pager' => $model->pager,
+        ];
+
+
+        echo view('templates/header');
+        echo view('eshop/cart', $data ); // return into main eshop page 
+        echo view('templates/footer');
+    }  
 }
