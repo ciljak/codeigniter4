@@ -75,7 +75,7 @@ class OrderModel extends Model
         
 
         return $this->asArray()
-                    ->where(['id' => $id])
+                    ->where(['order_id' => $id])
                     ->first();       // helper methods used by Query builder
     }
 

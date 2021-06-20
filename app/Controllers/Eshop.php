@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\eshopModel;
+use App\Models\orderModel;
 use CodeIgniter\Controller;
 
 /*********************************
@@ -55,7 +56,7 @@ class Eshop extends Controller
     }
 
     public function cart()
-    {
+    {   /* older aproach using only product table for marking bought product, now we read from order table
         $model = new EshopModel();
     
        
@@ -67,10 +68,24 @@ class Eshop extends Controller
             'title' => 'Your cart contains these items ...',
             'eshop' => $model->where('user_cart', session()->get('id'))->orderBy('id', 'DESC')->paginate(10), // read data marked with user_id in user_cart field in database
             'pager' => $model->pager,
-        ];
-            
-        
+        ];    */
 
+        $db      = \Config\Database::connect();
+               
+                $builder = $db->table('order');
+                $builder->select('*');
+                $builder->join('eshop', 'eshop.id = order.product_id');
+                $builder->where(array('user_id', session()->get('id'))); //->orderBy('product_id', 'DESC');
+                $data_aux =  $builder->get()->getResultArray();
+
+    
+        
+        $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'Your cart contains these items ...',
+            'eshop' => $data_aux  , // read data marked with user_id in user_cart field in database
+           
+        ];    
        
 
         
@@ -530,14 +545,74 @@ class Eshop extends Controller
     {
         
        
-       // rework this part - how to update only one field in row
-                $db      = \Config\Database::connect();
+       // mark product - but when we have order table only decrease number of items and in next step create new order recors (new approach)
+              /*  $db      = \Config\Database::connect();
                 $builder = $db->table('eshop');
     
                 //$builder->selectMax('id');
                 $builder->where('id', $id)->set('user_cart', session()->get('id'));
                // insert create new article, but we will update existing $builder->insert();
+                $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data */
+
+          // 0. get number of obtained products
+          // not implemented - only one item can be ordered - number of items adjustment can be done through cart in later implementation   
+          $data = [
+            //'eshop'  => $model->geteshop(),
+            'message' => '',
+            'message_type' => '',
+           ];
+          
+          // read data about ordered products
+          $model_eshop = new eshopModel();
+          $data['eshop'] = $model_eshop->getID($id);
+          $_calculated_total_price_without_DPH = $data['eshop']['product_price'];
+
+          //I. decrease number of items
+          if($data['eshop']['nr_of_items_on_store']>0 ) { // decrease only if number of item is 1 ore more on store
+                $db      = \Config\Database::connect();
+                $builder = $db->table('eshop');
+    
+                //$builder->selectMax('id');
+                $builder->where('id', $id)->set('nr_of_items_on_store', 'nr_of_items_on_store-1',  false);
+               // insert create new article, but we will update existing $builder->insert();
                 $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data
+            }
+          
+          //II. create records in order table
+                
+                $model_order = new orderModel();
+
+                // check if enough products on store, if not write message and does not add item to order list
+                if($data['eshop']['nr_of_items_on_store']>0 ) {
+                    // product can be bought is available on store
+                    $model_order->save([
+                        'user_id'  => session()->get('id'),
+                        'product_id' => $id,
+                        'number_of_ordered_items' => '1',
+                        'total_price' => $_calculated_total_price_without_DPH,
+                        'state_of_order' => 'waiting',
+                        'main_order_number'=> session()->get('id') // rework with adding date or time stamp
+                      ]);  
+                      
+                     
+                        $message = 'Item <b>'. $data['eshop']['product_name'] . '</b> has been succesfully aded to your cart. For further reference go to cart and adjust number of ordered items or remove
+                                    item for order listening instead.';
+                        $message_type = "msg_success";            
+                       
+
+                } else {
+                    // product can not to be bought because is sold
+                   
+                        //'eshop'  => $model->geteshop(),
+                        $message= 'Item has not to be added in to a order, because is not available on store. Please chose another item instad or contact our
+                                       helpdesk for further info.';
+                        $message_type = "msg_error";                
+                       
+                }
+
+
+               
+
 
         // send data after publishing to view
         $model = new eshopModel();
@@ -545,6 +620,8 @@ class Eshop extends Controller
         if(session()->get('role') == 'admin') { // if admin loged in thend dont filter published but display all to ability manage them
             $data = [
                 //'eshop'  => $model->geteshop(),
+                'message' =>  $message,
+                'message_type' =>  $message_type,
                 'title' => 'eshop archive',
                 'eshop' => $model->orderBy('id', 'DESC')->paginate(3),
                 'pager' => $model->pager,
@@ -554,6 +631,8 @@ class Eshop extends Controller
 
            $data = [
             //'eshop'  => $model->geteshop(),
+            'message' =>  $message,
+            'message_type' =>  $message_type,
             'title' => 'eshop archive',
             'eshop' => $model->where('is_published', '1')->orderBy('id', 'DESC')->paginate(3),
             'pager' => $model->pager,
@@ -568,7 +647,7 @@ class Eshop extends Controller
         echo view('templates/footer');
     }   
     
-    public function remove_from_cart($id) // remove product from cart - set user_cart back to default value 0
+    public function remove_from_cart($id) // remove product from cart - set user_cart back to default value 0 - our new aproach using order table does not need this function anymore
     {
         
         //find record with appropriate id and change value of item
@@ -614,7 +693,7 @@ class Eshop extends Controller
 
     public function remove_from_cart_return_to_cart($id) // remove product from cart - set user_cart back to default value 0
     {
-        
+       /* old aproach
         //find record with appropriate id and change value of item
         // $model->where('id', $id)->set('is_published', '0');
         $db      = \Config\Database::connect();
@@ -625,19 +704,273 @@ class Eshop extends Controller
        // $builder->insert();
         $builder-> update();
 
-        // send data after publishing to view
-        $model = new eshopModel();
+        */
+         // 0. get number of obtained products
+          // not implemented - only one item can be ordered - number of items adjustment can be done through cart in later implementation   
+          $data = [
+            //'eshop'  => $model->geteshop(),
+            'message' => '',
+            'message_type' => '',
+           ];
+          // from order order_id read appropriate product_id to look into a product
+          $model_order = new orderModel();
+          $orders_list = $model_order->getID($id);
+
+          // read data about ordered products
+          $model_eshop = new eshopModel();
+          $data['eshop'] = $model_eshop->getID($orders_list['product_id']);
+          $_calculated_total_price_without_DPH = $data['eshop']['product_price'];
+
+          //I. increase number of items - because item is returnet from user cart
+                $db      = \Config\Database::connect();
+                $builder = $db->table('eshop');
+    
+                //$builder->selectMax('id');
+                $builder->where('id', $orders_list['product_id'])->set('nr_of_items_on_store', 'nr_of_items_on_store+1', false);
+               // insert create new article, but we will update existing $builder->insert();
+                $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data
+          
+          
+          //II. delete records in order table
+                
+                $model_order = new orderModel();
+
+                // find appropriate record and delete them from order table
+                $model_order->where('order_id', $id)->delete();
+               
+
+        // send data after publishing to view - use join to combine order and product tables
+
+        $db      = \Config\Database::connect();
+               
+        $builder = $db->table('order');
+        $builder->select('*');
+        $builder->join('eshop', 'eshop.id = order.product_id');
+        $builder->where(array('user_id', session()->get('id'))); //->orderBy('product_id', 'DESC');
+        $data_aux =  $builder->get()->getResultArray();
+
+
+
+        $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'Your cart contains these items ...',
+            'eshop' => $data_aux  , // read data marked with user_id in user_cart field in database
+        
+        ];    
+
+
+
+
+       /* older simple aproach using only eshop table without order  $model = new eshopModel();
     
         $data = [
             //'eshop'  => $model->geteshop(),
             'title' => 'Your cart contains these items ...',
             'eshop' => $model->where('user_cart', session()->get('id'))->orderBy('id', 'DESC')->paginate(10), // read data marked with user_id in user_cart field in database
             'pager' => $model->pager,
-        ];
+        ]; */
 
 
         echo view('templates/header');
         echo view('eshop/cart', $data ); // return into main eshop page 
         echo view('templates/footer');
     }  
+
+    public function add_item($id) // adds another product of appropriate type to cart (multiply same items in cart page listening after clicking + button)
+    { // id is order_id from order table
+        
+       
+           // 0. get number of obtained products
+          // not implemented - only one item can be ordered - number of items adjustment can be done through cart in later implementation   
+          $data = [
+            //'eshop'  => $model->geteshop(),
+            'message' => '',
+            'message_type' => '',
+           ];
+          // from order order_id read appropriate product_id to look into a product
+          $model_order = new orderModel();
+          $orders_list = $model_order->getID($id);
+
+          // read data about ordered products
+          $model_eshop = new eshopModel();
+          $data['eshop'] = $model_eshop->getID($orders_list['product_id']);
+          $_calculated_total_price_without_DPH = $data['eshop']['product_price'];
+
+          if($data['eshop']['nr_of_items_on_store']>0 ) { // decrease only if number of item is 1 ore more on store
+            //I. decrease number of items in eshop - because item is added into a cart
+                    $db      = \Config\Database::connect();
+                    $builder = $db->table('eshop');
+        
+                    //$builder->selectMax('id');
+                    $builder->where('id', $orders_list['product_id'])->set('nr_of_items_on_store', 'nr_of_items_on_store-1', false);
+                // insert create new article, but we will update existing $builder->insert();
+                    $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data
+            
+            // II. increase number of items and recalculate price in order table
+                    
+                    $builder = $db->table('order');
+
+                    //$builder->selectMax('id');
+                    $builder->where('product_id', $orders_list['product_id'])->set('number_of_ordered_items', 'number_of_ordered_items+1', false);
+                    // insert create new article, but we will update existing $builder->insert();
+                    $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data
+    
+          }
+               
+
+        // send data after publishing to view - use join to combine order and product tables
+
+        $db      = \Config\Database::connect();
+               
+        $builder = $db->table('order');
+        $builder->select('*');
+        $builder->join('eshop', 'eshop.id = order.product_id');
+        $builder->where(array('user_id', session()->get('id'))); //->orderBy('product_id', 'DESC');
+        $data_aux =  $builder->get()->getResultArray();
+
+
+
+        $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'Your cart contains these items ...',
+            'eshop' => $data_aux  , // read data marked with user_id in user_cart field in database
+        
+        ];    
+
+
+
+
+       /* older simple aproach using only eshop table without order  $model = new eshopModel();
+    
+        $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'Your cart contains these items ...',
+            'eshop' => $model->where('user_cart', session()->get('id'))->orderBy('id', 'DESC')->paginate(10), // read data marked with user_id in user_cart field in database
+            'pager' => $model->pager,
+        ]; */
+
+
+        echo view('templates/header');
+        echo view('eshop/cart', $data ); // return into main eshop page 
+        echo view('templates/footer');
+    }   
+
+    public function sub_item($id) // adds another product of appropriate type to cart (multiply same items in cart page listening after clicking + button)
+    { // id is order_id from order table
+        
+       
+           // 0. get number of obtained products
+          // not implemented - only one item can be ordered - number of items adjustment can be done through cart in later implementation   
+          $data = [
+            //'eshop'  => $model->geteshop(),
+            'message' => '',
+            'message_type' => '',
+           ];
+          // from order order_id read appropriate product_id to look into a product
+          $model_order = new orderModel();
+          $orders_list = $model_order->getID($id);
+
+          // read data about ordered products
+          $model_eshop = new eshopModel();
+          $data['eshop'] = $model_eshop->getID($orders_list['product_id']);
+          $_calculated_total_price_without_DPH = $data['eshop']['product_price'];
+
+          if($orders_list['number_of_ordered_items']>1 ) { // if number is heigher than 0
+            //I. increase number of items in eshop - because item is removed from a cart
+                    $db      = \Config\Database::connect();
+                    $builder = $db->table('eshop');
+        
+                    //$builder->selectMax('id');
+                    $builder->where('id', $orders_list['product_id'])->set('nr_of_items_on_store', 'nr_of_items_on_store+1', false);
+                // insert create new article, but we will update existing $builder->insert();
+                    $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data
+            
+            // II. decrease number of items and recalculate price in order table
+                    
+                    $builder = $db->table('order');
+
+                    //$builder->selectMax('id');
+                    $builder->where('product_id', $orders_list['product_id'])->set('number_of_ordered_items', 'number_of_ordered_items-1', false);
+                    // insert create new article, but we will update existing $builder->insert();
+                    $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data
+    
+          } else  if($orders_list['number_of_ordered_items'] == 1 ){ // if number is = 1 then coppletly delete row from order table
+
+
+                  //I. increase number of items in eshop - because item is removed from a cart
+                  $db      = \Config\Database::connect();
+                  $builder = $db->table('eshop');
+      
+                  //$builder->selectMax('id');
+                  $builder->where('id', $orders_list['product_id'])->set('nr_of_items_on_store', 'nr_of_items_on_store+1', false);
+                 // insert create new article, but we will update existing $builder->insert();
+                  $builder-> update(); // for reference please visit https://codeigniter.com/user_guide/database/query_builder.html?highlight=select#updating-data
+          
+                // II. but delete that item
+                $model_order = new orderModel();
+
+                // find appropriate record and delete them from order table
+                $model_order->where('order_id', $id)->delete();
+                  
+                 
+          }
+               
+
+        // send data after publishing to view - use join to combine order and product tables
+
+        $db      = \Config\Database::connect();
+               
+        $builder = $db->table('order');
+        $builder->select('*');
+        $builder->join('eshop', 'eshop.id = order.product_id');
+        $builder->where(array('user_id', session()->get('id'))); //->orderBy('product_id', 'DESC');
+        $data_aux =  $builder->get()->getResultArray();
+
+
+
+        $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'Your cart contains these items ...',
+            'eshop' => $data_aux  , // read data marked with user_id in user_cart field in database
+        
+        ];    
+
+
+
+
+       /* older simple aproach using only eshop table without order  $model = new eshopModel();
+    
+        $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'Your cart contains these items ...',
+            'eshop' => $model->where('user_cart', session()->get('id'))->orderBy('id', 'DESC')->paginate(10), // read data marked with user_id in user_cart field in database
+            'pager' => $model->pager,
+        ]; */
+
+
+        echo view('templates/header');
+        echo view('eshop/cart', $data ); // return into main eshop page 
+        echo view('templates/footer');
+    }   
+
+    /* make_order function is responsible for taking main_order_number and process order */
+    public function make_order($main_order_number) { //
+       
+
+        // dummy data for testing purpouses only
+        $data = [
+            //'eshop'  => $model->geteshop(),
+            'title' => 'Here we continous with order fullfilment ...',
+            
+        
+        ];    
+
+
+        echo view('templates/header');
+        echo view('eshop/make_order', $data ); // return into main eshop page 
+        echo view('templates/footer');
+
+
+    }
+
 }

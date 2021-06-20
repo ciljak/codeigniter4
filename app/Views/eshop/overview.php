@@ -1,5 +1,8 @@
 <!-- OVERVIEW is responsible for display of all news articles with buttons for desired operations -->
 <section>
+    <?php if (isset($message)) : //if message from controler in data asociative array is passed then display content ?>
+        <h3 class="message_above <?= esc($message_type) ?>"><?= $message ?></h3>
+    <?php endif ?>  
     <img src="/eshop_images/eshop_logo.png" alt="main_eshop_logo" height="250px"> <br><br>
     <?php if ((session()->get('isLoggedIn')) ): 
 				//loged in user - can publish news article but still markt as unpublished and only site admin can make it visible by changing value is_published to true = 1 ?>
@@ -19,6 +22,8 @@
     
 
     <h1 class="main_h1"><?= esc($title) ?></h1>
+         
+    
 
     <?php if (! empty($eshop) && is_array($eshop)) : ?>
 
