@@ -65,6 +65,7 @@ $routes->match(['get', 'post'], 'eshop/remove_from_cart/(:segment)', 'Eshop::rem
 $routes->match(['get', 'post'], 'eshop/remove_from_cart_return_to_cart/(:segment)', 'Eshop::remove_from_cart_return_to_cart/$1'); // for routing to controller responsible for news article unpublishing
 
 $routes->match(['get', 'post'], 'eshop/cart', 'Eshop::cart'); // for routing to controller responsible for news article unpublishing
+$routes->match(['get', 'post'], 'eshop/action', 'Eshop::action');
 
 $routes->match(['get', 'post'], 'eshop/add_item/(:segment)', 'Eshop::add_item/$1'); //routing to cart after add item + button clicking
 $routes->match(['get', 'post'], 'eshop/sub_item/(:segment)', 'Eshop::sub_item/$1'); //routing to cart after sub item - button clicking

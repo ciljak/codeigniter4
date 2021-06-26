@@ -274,6 +274,26 @@ class Eshop extends Controller
         }
     }
 
+    /**
+     * action function handle ajax request from product create form responsible for selective populatin subcategory select field in context of selected product category
+     */
+    public function action(){
+        if($this->request->getVar('action'))
+        {
+            $action = $this->request->getVar('action');
+
+            if($action == 'get_subcategory'){
+                $model = new eshopModel();
+                // if first run provide category/ subcategory data for create view
+                $subcategorydata = $model->list_subcategory_subcategory($this->request->getVar('product_category'));
+              // $subcategorydata = $model->where('product_category', $this->request->getVar('product_category'))->findAll;
+                echo json_encode($subcategorydata);
+
+            }
+        }
+
+    }
+
     public function delete_eshop_product($id) {
 
         $model = new eshopModel();
