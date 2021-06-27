@@ -4,7 +4,7 @@
 
     <?= \Config\Services::validation()->listErrors() ?>
 
-    <form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="FormSubmit(this);"> <!-- if form submited invoke script that check if additional subcategory has been created and put that value into a product_subcategory that is select input (use hiden element) -->
         <?= csrf_field() ?>
         <!-- There are probably only two things here that look unfamiliar. 
         The \Config\Services::validation()->listErrors() function is used to report errors related to form validation. 
@@ -39,7 +39,13 @@
         <label for="product_category">Product subcategory</label>
         <select name="product_subcategory" id="subcategory_data" >
             <option value="">Select subcategory</option>
-        </select>   <br> 
+        </select> 
+        <!-- hidden input field for input new subcategory that is not available in a database --> 
+            <label for="product_name" id="new_subcategory_data_label">Please enter new subcategory name:</label>
+            <input type="input" name="new_product_subcategory" id="new_subcategory_data"/><br /> 
+        
+        <br> 
+
             
         
         
@@ -49,7 +55,40 @@
 
         <!-- read value entered into product category -->
         <script>
-           $(document).ready(function(){
+           $(document).ready(function(){ // only when document is fully loaded
+
+               // hide optional input fieled for creating own subcategory
+               $('#new_subcategory_data_label').hide();
+               $('#new_subcategory_data').hide();
+                  //if in subcategory has been selected * New subcategory, unhide previous input fileds
+                  $('#subcategory_data').change(function(){  
+                      console.log($('#subcategory_data').val()); // debug outupt during functionality testing
+                    if($('#subcategory_data').val() == "new_subcategory") {
+                        $('#new_subcategory_data_label').show();
+                        $('#new_subcategory_data').show();
+                    }
+                });
+                
+                // on submit check if hiden element for product_subcategory contains value and then read this value and assign it into a value of product_subcategory select element
+                /* function FormSubmit(oForm) {
+                    if($('#new_subcategory_data').val() != "") {
+                        $('#subcategory_data').val($('#new_subcategory_data').val());
+
+                    }
+   
+                }  abandoned way how to solve that problem*/
+
+                // another aproach on change hidem element update the main product_subcategory select elelment that provide appropriate data after submitting the form
+                $('#new_subcategory_data').change(function(){
+
+                              var entered_new_subcategory = $('#new_subcategory_data').val();
+                              var html = '<option value="'+ entered_new_subcategory +'" placeholder="'+ entered_new_subcategory +'">'+ entered_new_subcategory +'</option>';
+                              // html += '<option value="'+ entered_new_subcategory +'" >"'+ entered_new_subcategory +'"</option>';
+                              $('#subcategory_data').html(html); // change content of html of the selected html element marked with mentioned ID "#subcategory_data"
+
+                });
+               
+               // make Ajax request for subcategory when know selected main category
                $('#category_data').change(function(){
                    var product_category = $('#category_data').val();
                    var action = 'get_subcategory';
@@ -64,9 +103,9 @@
                                var html = '<option value="">Select subcategory</option>';
 
                                for(var count = 0; count < data.length; count++) {
-                                   html += '<option value="'+data[count].product_subcategory+'">'+data[count].product_subcategory+'</option>';
+                                   html += '<option value='+data[count].product_subcategory+'>'+data[count].product_subcategory+'</option>';
                                }
-
+                               // here we provide options for entering new subcategory
                                html += '<option value="new_subcategory" id="new_subcategory">* New subcategory</option>';
                                 
                                $('#subcategory_data').html(html);
