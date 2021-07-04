@@ -975,20 +975,112 @@ class Eshop extends Controller
 
     /* make_order function is responsible for taking main_order_number and process order */
     public function make_order($main_order_number) { //
+
+        // send data after publishing to view - use join to combine order and product tables
+
+
+        // if data submited succesfully
+        if ($this->request->getMethod() === 'post' && $this->validate([
+            'first_name' => 'required|min_length[2]|max_length[255]',
+            'last_name' => 'required|min_length[2]|max_length[255]',
+            'delivery_type'  => 'required',
+            'delivery_street'  => 'required',
+            'delivery_state'  => 'required',
+            'delivery_city'  => 'required',
+            'ZIPcode'  => 'required',
+            'GDPRaccept'  => 'required',
+            'ShopServiceLawAccept'  => 'required',
+            
+        ]))
+    {
+       
+        
+        
+        // The move() method returns a new File instance that for the relocated file, so you must capture the result if the resulting location is needed:
+            $model_final_order = new FinalOrderModel();
+
+            if(session()->get('id')== null) { // anonymous user - not loged in
+                $model_final_order->save([
+                    'first_name' => $this->request->getPost('first_name'),
+                    'last_name' => $this->request->getPost('last_name'),
+                    'delivery_type' => $this->request->getPost('delivery_type'),
+                    'delivery_street' => $this->request->getPost('delivery_street'),
+                    'delivery_state' => $this->request->getPost('delivery_state'),
+                    'delivery_city' => $this->request->getPost('delivery_city'),
+                    'ZIPcode' => $this->request->getPost('ZIPcode'),
+                    'GDPRaccept'  => $this->request->getPost('GDPRaccept'),
+                    'ShopServiceLawAccept'  => $this->request->getPost('ShopServiceLawAccept'),
+                    'user_id'  => '0' 
+                ]);    
+            } else { // loged in user - session contains their user_id or id
+                $model_final_order->save([
+                    'first_name' => $this->request->getPost('first_name'),
+                    'last_name' => $this->request->getPost('last_name'),
+                    'delivery_type' => $this->request->getPost('delivery_type'),
+                    'delivery_street' => $this->request->getPost('delivery_street'),
+                    'delivery_state' => $this->request->getPost('delivery_state'),
+                    'delivery_city' => $this->request->getPost('delivery_city'),
+                    'ZIPcode' => $this->request->getPost('ZIPcode'),
+                    'GDPRaccept'  => $this->request->getPost('GDPRaccept'),
+                    'ShopServiceLawAccept'  => $this->request->getPost('ShopServiceLawAccept'),
+                    'user_id'  => session()->get('id')
+                ]);    
+                
+            };
+
+       
+        
+        //$data['eshop'] = $model->getLatest(); this approach does not work because i cann note order_by and take first() element but all data ara available 
+        // and can by simply passed by on from send post
+        $data ['final_order'] = [
+            'first_name' => $this->request->getPost('first_name'),
+            'last_name' => $this->request->getPost('last_name'),
+            'delivery_type' => $this->request->getPost('delivery_type'),
+            'delivery_street' => $this->request->getPost('delivery_street'),
+            'delivery_state' => $this->request->getPost('delivery_state'),
+            'delivery_city' => $this->request->getPost('delivery_city'),
+            'ZIPcode' => $this->request->getPost('ZIPcode'),
+            'GDPRaccept'  => $this->request->getPost('GDPRaccept'),
+            'ShopServiceLawAccept'  => $this->request->getPost('ShopServiceLawAccept'),
+            'user_id'  => session()->get('id')
+        ] ;
+
+       
+
+
+        echo view('templates/header', ['title' => 'Create a eshop item']);
+        echo view('eshop/ordered_succesfully', $data );
+        echo view('templates/footer');
+    }
+    else
+    { // if data has not to be posted
+       
+        $db      = \Config\Database::connect();
+               
+        $builder = $db->table('order');
+        $builder->select('*');
+        $builder->join('eshop', 'eshop.id = order.product_id');
+        $builder->where(array('user_id', session()->get('id'))); //->orderBy('product_id', 'DESC');
+        $data_aux =  $builder->get()->getResultArray();
        
 
         // dummy data for testing purpouses only
         $data = [
             //'eshop'  => $model->geteshop(),
             'title' => 'Here we continous with order fullfilment ...',
+            'eshop' => $data_aux  , // read data marked with user_id in user_cart field in database
             
         
-        ];    
+        ];  
+        
+        
 
 
         echo view('templates/header');
         echo view('eshop/make_order', $data ); // return into main eshop page 
         echo view('templates/footer');
+    }
+
 
 
     }
