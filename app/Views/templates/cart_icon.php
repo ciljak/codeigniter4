@@ -13,7 +13,7 @@
    $builder = $db->table('order');
    $builder->select('*');
    $builder->join('eshop', 'eshop.id = order.product_id'); // join order and eshop table interconcet them by same product_id 'eshop.id = order.product_id'
-   $builder->where(array('user_id', session()->get('id'))); //->orderBy('product_id', 'DESC');
+   $builder->where(array('user_id', session()->get('id')))->where('confirmed_order', '0');; //->orderBy('product_id', 'DESC');
    
 
    $cart = $builder->get()->getResultArray();

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\eshopModel;
 use App\Models\orderModel;
+use App\Models\FinalOrderModel;
 use CodeIgniter\Controller;
 
 /*********************************
@@ -75,7 +76,8 @@ class Eshop extends Controller
                 $builder = $db->table('order');
                 $builder->select('*');
                 $builder->join('eshop', 'eshop.id = order.product_id');
-                $builder->where(array('user_id', session()->get('id'))); //->orderBy('product_id', 'DESC');
+                $builder->where(array('user_id', session()->get('id')))->where('confirmed_order', '0'); //->orderBy('product_id', 'DESC');
+                                                                         // >where('confirmed_order', '0'); display only non finaly confirmed items
                 $data_aux =  $builder->get()->getResultArray();
 
     
@@ -974,7 +976,7 @@ class Eshop extends Controller
     }   
 
     /* make_order function is responsible for taking main_order_number and process order */
-    public function make_order($main_order_number) { //
+    public function make_order() { //
 
         // send data after publishing to view - use join to combine order and product tables
 
@@ -1028,11 +1030,11 @@ class Eshop extends Controller
                 
             };
 
-       
+        
         
         //$data['eshop'] = $model->getLatest(); this approach does not work because i cann note order_by and take first() element but all data ara available 
         // and can by simply passed by on from send post
-        $data ['final_order'] = [
+        $data_order  = [
             'first_name' => $this->request->getPost('first_name'),
             'last_name' => $this->request->getPost('last_name'),
             'delivery_type' => $this->request->getPost('delivery_type'),
@@ -1044,10 +1046,34 @@ class Eshop extends Controller
             'ShopServiceLawAccept'  => $this->request->getPost('ShopServiceLawAccept'),
             'user_id'  => session()->get('id')
         ] ;
+        //mark all items from processed and confirmed order as confirmed_order in order table
+        $db      = \Config\Database::connect();
+        
+        // part I. - update confirmed order
+        $builder = $db->table('order');
+        $builder->select('*');
+        $builder->join('eshop', 'eshop.id = order.product_id');
+        $builder->where(array('user_id', session()->get('id')))->set('confirmed_order', '1'); //->orderBy('product_id', 'DESC');
+        $builder-> update();
 
-       
+        // part II. obtain correct data for display of ordered items
 
+        $builder = $db->table('order');
+        $builder->select('*');
+        $builder->join('eshop', 'eshop.id = order.product_id');
+        $builder->where(array('user_id', session()->get('id')))->where('confirmed_order', '0'); //->orderBy('product_id', 'DESC');
+        
+        $data_aux =  $builder->get()->getResultArray();
 
+        $data = [
+            //compose array of data available into a view
+            'title' => 'Order successful and confirmed_order set to 1',
+            'eshop' => $data_aux  , // read data marked with user_id in user_cart field in database
+            'final_order' => $data_order  ,
+        
+        ];    
+        
+        
         echo view('templates/header', ['title' => 'Create a eshop item']);
         echo view('eshop/ordered_succesfully', $data );
         echo view('templates/footer');
@@ -1060,7 +1086,8 @@ class Eshop extends Controller
         $builder = $db->table('order');
         $builder->select('*');
         $builder->join('eshop', 'eshop.id = order.product_id');
-        $builder->where(array('user_id', session()->get('id'))); //->orderBy('product_id', 'DESC');
+        $builder->where(array('user_id', session()->get('id')))->where('confirmed_order', '0'); //->orderBy('product_id', 'DESC');
+        
         $data_aux =  $builder->get()->getResultArray();
        
 

@@ -69,7 +69,7 @@
 
     <br>
     
-    <form enctype="multipart/form-data" action="<?php echo base_url('/contactus/contactus_add_post/'); ?>" method="post"> <!-- contactus_add_post $_SERVER['PHP_SELF'] -->
+    <form enctype="multipart/form-data" action="<?php echo base_url('/eshop/make_order'); ?>" method="post"> <!-- contactus_add_post $_SERVER['PHP_SELF'] -->
         <?= csrf_field() ?>
         <!-- There are probably only two things here that look unfamiliar. 
         The \Config\Services::validation()->listErrors() function is used to report errors related to form validation. 
