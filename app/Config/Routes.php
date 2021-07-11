@@ -72,6 +72,9 @@ $routes->match(['get', 'post'], 'eshop/sub_item/(:segment)', 'Eshop::sub_item/$1
 $routes->match(['get', 'post'], 'eshop/make_order/(:segment)', 'Eshop::make_order/$1'); //routing to order fullfilment page after click on button "Progress with order ->" at end of cart page
 
 $routes->match(['get', 'post'], 'eshop/ordered_succesfully/(:segment)', 'Eshop::ordered_succesfully/$1'); // routing to information page about fullfilment of ordering process
+$routes->match(['get', 'post'], 'eshop/filter/(:segment)/(:segment)', 'Eshop::filter/$1/$2'); // routing to controller responsible for display filtered output of e-shop products along category and subcategory
+//routing two parameters  $route["getproduct/(:any)/(:num)"]="main/changequestion/$1/$2" or refer to article https://stackoverflow.com/questions/13246286/how-to-route-2-parameters-to-a-controller , 11.7.2021
+//$route['subjects/(:num)/(:any)'] = 'subjects/view/$1/$2';
 
 $routes->get('eshop/(:segment)', 'Eshop::view/$1');  // for routing appropriate product items along slug
 

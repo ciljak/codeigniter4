@@ -56,6 +56,72 @@ class Eshop extends Controller
         echo view('templates/footer', $data);
     }
 
+    public function filter($selected_category = 0 ,  $selected_subcategory = 0 )
+    {
+        $model = new EshopModel();
+        
+       // $selected_category =  $this->uri->segment(3);
+      //  $selected_subcategory=  $this->uri->segment(4);
+    
+       if($selected_subcategory != "none") {
+            if(session()->get('role') == 'admin') { // if admin loged in thend dont filter published but display all to ability manage them
+                $data = [
+                    //'eshop'  => $model->geteshop(),
+                    'title' => 'Our latest e-shop products are here ...',
+                    'eshop' => $model->where('product_subcategory', $selected_subcategory)->orderBy('id', 'DESC')->paginate(3),
+                    'pager' => $model->pager,
+                ];
+        
+            } else { // coomon user see only published articles
+
+            $data = [
+                //'eshop'  => $model->geteshop(),
+                'title' => 'Our latest e-shop products are here ...',
+                'eshop' => $model->where('is_published', '1')->where('product_subcategory', $selected_subcategory)->orderBy('id', 'DESC')->paginate(3),
+                'pager' => $model->pager,
+            ];
+
+                
+            };
+
+       } else { // if subcategory is none then filter along main product:category
+            if(session()->get('role') == 'admin') { // if admin loged in thend dont filter published but display all to ability manage them
+                $data = [
+                    //'eshop'  => $model->geteshop(),
+                    'title' => 'Our latest e-shop products are here ...',
+                    'eshop' => $model->where('product_category', $selected_category)->orderBy('id', 'DESC')->paginate(3),
+                    'pager' => $model->pager,
+                ];
+        
+            } else { // coomon user see only published articles
+
+            $data = [
+                //'eshop'  => $model->geteshop(),
+                'title' => 'Our latest e-shop products are here ...',
+                'eshop' => $model->where('is_published', '1')->where('product_category', $selected_category)->orderBy('id', 'DESC')->paginate(3),
+                'pager' => $model->pager,
+            ];
+
+                
+            };
+
+       }
+
+       
+
+        /* pagination config */
+        /* Customizing the Links
+           View Configuration
+           When the links are rendered out to the page, they use a view file to describe the HTML. You can easily change the view that is used by editing app/Config/Pager.php:
+        */
+
+        
+    
+        echo view('templates/header', $data);
+        echo view('eshop/overview', $data);
+        echo view('templates/footer', $data);
+    }
+
     public function cart()
     {   /* older aproach using only product table for marking bought product, now we read from order table
         $model = new EshopModel();
