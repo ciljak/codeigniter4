@@ -29,7 +29,14 @@ class Eshop extends Controller
                 'title' => 'Our latest e-shop products are here ...',
                 'eshop' => $model->orderBy('id', 'DESC')->paginate(3),
                 'pager' => $model->pager,
+
+                //"nonpaginated" data array for display of side menu e-shop itmes not limited by applied paging limit
+                'nonpaginated_data_for_menu' => $model->orderBy('id', 'DESC')->paginate(),
+                
             ];
+           
+
+
     
         } else { // coomon user see only published articles
 
@@ -38,7 +45,13 @@ class Eshop extends Controller
             'title' => 'Our latest e-shop products are here ...',
             'eshop' => $model->where('is_published', '1')->orderBy('id', 'DESC')->paginate(3),
             'pager' => $model->pager,
+
+            //"nonpaginated" data array for display of side menu e-shop itmes not limited by applied paging limit
+            'nonpaginated_data_for_menu' => $model->where('is_published', '1')->orderBy('id', 'DESC')->paginate(),
+            
         ];
+
+        
 
             
         };
@@ -49,7 +62,7 @@ class Eshop extends Controller
            When the links are rendered out to the page, they use a view file to describe the HTML. You can easily change the view that is used by editing app/Config/Pager.php:
         */
 
-        
+       
     
         echo view('templates/header', $data);
         echo view('eshop/overview', $data);
@@ -70,6 +83,9 @@ class Eshop extends Controller
                     'title' => 'Our latest e-shop products are here ...',
                     'eshop' => $model->where('product_subcategory', $selected_subcategory)->orderBy('id', 'DESC')->paginate(3),
                     'pager' => $model->pager,
+
+                     //"nonpaginated" data array for display of side menu e-shop itmes not limited by applied paging limit
+                     'nonpaginated_data_for_menu' => $model->where('product_subcategory', $selected_subcategory)->orderBy('id', 'DESC')->paginate(),
                 ];
         
             } else { // coomon user see only published articles
@@ -79,6 +95,9 @@ class Eshop extends Controller
                 'title' => 'Our latest e-shop products are here ...',
                 'eshop' => $model->where('is_published', '1')->where('product_subcategory', $selected_subcategory)->orderBy('id', 'DESC')->paginate(3),
                 'pager' => $model->pager,
+
+                //"nonpaginated" data array for display of side menu e-shop itmes not limited by applied paging limit
+                'nonpaginated_data_for_menu' => $model->where('is_published', '1')->where('product_subcategory', $selected_subcategory)->orderBy('id', 'DESC')->paginate(),
             ];
 
                 
@@ -91,6 +110,9 @@ class Eshop extends Controller
                     'title' => 'Our latest e-shop products are here ...',
                     'eshop' => $model->where('product_category', $selected_category)->orderBy('id', 'DESC')->paginate(3),
                     'pager' => $model->pager,
+
+                    //"nonpaginated" data array for display of side menu e-shop itmes not limited by applied paging limit
+                    'nonpaginated_data_for_menu' => $model->orderBy('id', 'DESC')->paginate(),
                 ];
         
             } else { // coomon user see only published articles
@@ -98,8 +120,9 @@ class Eshop extends Controller
             $data = [
                 //'eshop'  => $model->geteshop(),
                 'title' => 'Our latest e-shop products are here ...',
-                'eshop' => $model->where('is_published', '1')->where('product_category', $selected_category)->orderBy('id', 'DESC')->paginate(3),
+                'eshop' =>  $model->where('product_category', $selected_category)->orderBy('id', 'DESC')->paginate(3),
                 'pager' => $model->pager,
+                'nonpaginated_data_for_menu' =>  $model->where('product_category', $selected_category)->orderBy('id', 'DESC')->paginate(),
             ];
 
                 

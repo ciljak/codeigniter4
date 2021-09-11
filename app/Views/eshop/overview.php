@@ -165,10 +165,11 @@
 					<li class="menu-item hidden"><a href="<?php echo base_url('users/logout') ; ?>">Logout</a></li>
 				</ul>
 				</br></br>
+                <?php endif; ?> 
                 
                 <h2>e-shop categories</h2>
                 <ul class="nav flex-column">  <!-- bootstrap styling https://getbootstrap.com/docs/5.0/components/navs-tabs/ -->
-                <?php foreach ($eshop as $eshop_item): ?>
+                <?php foreach ($nonpaginated_data_for_menu as $eshop_item): ?>
                     <?php 
                         if (empty($previews_category)) { // if it is first run assign emty string
                             $previews_category = "";
@@ -207,8 +208,10 @@
                         $previews_subcategory = $eshop_item['product_subcategory'];
                     ?>
                     <?php endforeach; ?> 
+                    <!-- last menu item is link returning to main e-shop page displaying all category links -->
+                    <li class="menu-item hidden"><a href="<?php echo base_url('eshop') ; ?>"><img src="/images/return_icon.png" alt="return_icon" height="20px"> Return</a></li>
                 </ul>   
-				<?php endif; ?> 
+				
 				<h2>Menu options</h2>
 					<ul class="nav flex-column">
 					
